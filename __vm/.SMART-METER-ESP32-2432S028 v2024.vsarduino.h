@@ -16,13 +16,13 @@
 #include <arduino.h>
 #include <pins_arduino.h> 
 #include "..\SMART-METER-ESP32-2432S028 v2024.ino"
-#include "..\..\SMART-METER-ESP32-2432S028\WifiManager32.ino"
-#include "..\..\SMART-METER-ESP32-2432S028\cat.ino"
-#include "..\..\SMART-METER-ESP32-2432S028\display.ino"
-#include "..\..\SMART-METER-ESP32-2432S028\hardswtich.ino"
-#include "..\..\SMART-METER-ESP32-2432S028\serialcontrol.ino"
-#include "..\..\SMART-METER-ESP32-2432S028\setup.ino"
-#include "..\..\SMART-METER-ESP32-2432S028\touchpad.ino"
-#include "..\..\SMART-METER-ESP32-2432S028\touchswitch.ino"
+#include "..\WifiManager32.ino"
+#include "..\cat.ino"
+#include "..\display.ino"
+#include "..\hardswtich.ino"
+#include "..\serialcontrol.ino"
+#include "..\setup.ino"
+#include "..\touchpad.ino"
+#include "..\touchswitch.ino"
 #endif
 #endif

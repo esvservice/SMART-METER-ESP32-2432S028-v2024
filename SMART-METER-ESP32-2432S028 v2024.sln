@@ -15,6 +15,23 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WiFiManager-master-2.0.17",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebServer-3.0.4", "Libraries\WebServer\3.0.4\WebServer\WebServer-3.0.4.vcxitems", "{83642F45-5E8A-4316-99B1-A61E03F6E7DC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{818BCA06-A63F-45B5-9C63-3D0A4F8993FB}"
+	ProjectSection(SolutionItems) = preProject
+		cat.ino = cat.ino
+		colourcode.h = colourcode.h
+		display.ino = display.ino
+		hardswtich.ino = hardswtich.ino
+		lgfx_ESP32_2432S028.h = lgfx_ESP32_2432S028.h
+		serialcontrol.ino = serialcontrol.ino
+		setup.ino = setup.ino
+		touch.h = touch.h
+		touchpad.ino = touchpad.ino
+		touchswitch.ino = touchswitch.ino
+		variables.h = variables.h
+		WebSocketsServer.h = WebSocketsServer.h
+		WifiManager32.ino = WifiManager32.ino
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM

@@ -1,0 +1,73 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SMART-METER-ESP32-2432S028 v2024", "SMART-METER-ESP32-2432S028 v2024.vcxproj", "{DBE5D8F2-0825-4159-B161-319A2370FC66}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WiFi-3.0.4", "Libraries\WiFi\3.0.4\WiFi\WiFi-3.0.4.vcxitems", "{20F4D4A8-E677-474E-BA55-45AC814B3D20}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LovyanGFX-1.1.16", "Libraries\LovyanGFX\1.1.16\LovyanGFX\LovyanGFX-1.1.16.vcxitems", "{B3AD1804-E529-4B7F-8476-ADB4A31B730C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XPT2046_Touchscreen-1.4", "Libraries\XPT2046_Touchscreen\1.4\XPT2046_Touchscreen\XPT2046_Touchscreen-1.4.vcxitems", "{78046AAD-39D2-4C48-988B-2735A04EAB5A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WiFiManager-master-2.0.17", "Libraries\WiFiManager-master\2.0.17\WiFiManager-master\WiFiManager-master-2.0.17.vcxitems", "{5CDE58BD-ED82-49BA-9638-E9BED373E393}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebServer-3.0.4", "Libraries\WebServer\3.0.4\WebServer\WebServer-3.0.4.vcxitems", "{83642F45-5E8A-4316-99B1-A61E03F6E7DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|ARM64 = Debug|ARM64
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ARM = Release|ARM
+		Release|ARM64 = Release|ARM64
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Debug|ARM.ActiveCfg = Debug|ARM
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Debug|ARM.Build.0 = Debug|ARM
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Debug|ARM.Deploy.0 = Debug|ARM
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Debug|ARM64.Build.0 = Debug|ARM64
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Debug|x64.ActiveCfg = Debug|x64
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Debug|x64.Build.0 = Debug|x64
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Debug|x64.Deploy.0 = Debug|x64
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Debug|x86.ActiveCfg = Debug|x86
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Debug|x86.Build.0 = Debug|x86
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Debug|x86.Deploy.0 = Debug|x86
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Release|ARM.ActiveCfg = Release|ARM
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Release|ARM.Build.0 = Release|ARM
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Release|ARM.Deploy.0 = Release|ARM
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Release|ARM64.ActiveCfg = Release|ARM64
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Release|ARM64.Build.0 = Release|ARM64
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Release|ARM64.Deploy.0 = Release|ARM64
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Release|x64.ActiveCfg = Release|x64
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Release|x64.Build.0 = Release|x64
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Release|x64.Deploy.0 = Release|x64
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Release|x86.ActiveCfg = Release|x86
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Release|x86.Build.0 = Release|x86
+		{DBE5D8F2-0825-4159-B161-319A2370FC66}.Release|x86.Deploy.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {41FBCD7C-36A7-41A5-ACBF-50A3386CBDC7}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Libraries\WiFi\3.0.4\WiFi\WiFi-3.0.4.vcxitems*{20f4d4a8-e677-474e-ba55-45ac814b3d20}*SharedItemsImports = 9
+		Libraries\WiFiManager-master\2.0.17\WiFiManager-master\WiFiManager-master-2.0.17.vcxitems*{5cde58bd-ed82-49ba-9638-e9bed373e393}*SharedItemsImports = 9
+		Libraries\XPT2046_Touchscreen\1.4\XPT2046_Touchscreen\XPT2046_Touchscreen-1.4.vcxitems*{78046aad-39d2-4c48-988b-2735a04eab5a}*SharedItemsImports = 9
+		Libraries\WebServer\3.0.4\WebServer\WebServer-3.0.4.vcxitems*{83642f45-5e8a-4316-99b1-a61e03f6e7dc}*SharedItemsImports = 9
+		Libraries\LovyanGFX\1.1.16\LovyanGFX\LovyanGFX-1.1.16.vcxitems*{b3ad1804-e529-4b7f-8476-adb4a31b730c}*SharedItemsImports = 9
+		Libraries\LovyanGFX\1.1.16\LovyanGFX\LovyanGFX-1.1.16.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
+		Libraries\WebServer\3.0.4\WebServer\WebServer-3.0.4.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
+		Libraries\WiFiManager-master\2.0.17\WiFiManager-master\WiFiManager-master-2.0.17.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
+		Libraries\WiFi\3.0.4\WiFi\WiFi-3.0.4.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
+		Libraries\XPT2046_Touchscreen\1.4\XPT2046_Touchscreen\XPT2046_Touchscreen-1.4.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
+	EndGlobalSection
+EndGlobal

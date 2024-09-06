@@ -16,7 +16,10 @@
   You must set the transceiver's RS232 connection to 38400 bps.
   This is version 1.0 first release, only tested on a FT-991a, but it should also work on a FT-991.
 
-  bij opstart eerst wifisettings invullen => hotspotnaam: SmartMeter  / Wachtwoord: admin
+  bij opstart eerst wifisettings invullen
+  hotspotnaam: SmartMeter 
+  Wachtwoord: smartadmin
+
   Daarna als deze correct zijn heb je toegang tot de webserver van de SmartMeter => 192.168.0.***
   todo jess => ipadres laten verschijnen op display van de webserver
 

@@ -21,7 +21,7 @@ static void wifisetup32() {
     bool res;
     // res = wm.autoConnect(); // auto generated AP name from chipid
     // res = wm.autoConnect("AutoConnectAP"); // anonymous ap
-    res = wm.autoConnect("SmartMeter", "password"); // password protected ap
+    res = wm.autoConnect("SmartMeter", "admin"); // password protected ap
 
     if (!res) {
         Serial.println("Failed to connect");

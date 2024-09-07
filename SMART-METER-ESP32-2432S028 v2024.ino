@@ -1,6 +1,6 @@
 /*
  Name:		SMART_METER_ESP32_2432S028_v2024.ino
- Created:	9/6/2024 7:45:53 AM
+ Created:	9/6/2024 11:29:53 AM
  Author:	ON4JES / ON7LSP / ON3VNA
 
   This is a sketch for 7 bargraph meters on a 240 x 320, 2.8 TFT display (touch is not used) with ILI9341 for the Yaesu FT-991a (and FT-991).
@@ -46,7 +46,7 @@
 
 
 
-WebServer server(80); // Creëer een WebServer object op poort 80
+WebServer server(80); // CreÃ«er een WebServer object op poort 80
 
 
 // Functie voor de root (homepage)
@@ -77,7 +77,7 @@ void handleRoot() {
     html += "<p>Dit is de homepage voor de SMART DISPLAY.</p>";
     html += "<p>Er zal nog heel veel aan gewerkt worden...</p>";
 
-    // Terminal window waar de seriële communicatie wordt weergegeven
+    // Terminal window waar de seriÃ«le communicatie wordt weergegeven
     html += "<textarea id='terminal' class='terminal' readonly></textarea>";
 
     // Knop om WiFi-instellingen te wissen
@@ -88,7 +88,7 @@ void handleRoot() {
     // JavaScript voor het bijwerken van de terminal-tekst
     html += "<script>";
 
-    // Simuleer het ontvangen van seriële data in de terminal
+    // Simuleer het ontvangen van seriÃ«le data in de terminal
     html += "let terminal = document.getElementById('terminal');";
     html += "let serialData = '';";
 
@@ -98,11 +98,11 @@ void handleRoot() {
     html += "  terminal.scrollTop = terminal.scrollHeight;"; // Scroll automatisch naar de onderkant
     html += "}";
 
-    // Simuleer seriële communicatie - vervang dit met echte data als nodig
+    // Simuleer seriÃ«le communicatie - vervang dit met echte data als nodig
     html += "setInterval(function() {";
     html += "  let simulatedData = 'Serial: Verbonden met SMART DISPLAY...';";
     html += "  addToTerminal(simulatedData);";
-    html += "}, 2000);";  // Voeg elke 2 seconden nieuwe seriële data toe
+    html += "}, 2000);";  // Voeg elke 2 seconden nieuwe seriÃ«le data toe
 
     html += "</script>";
 

@@ -13,12 +13,12 @@
 
 // Voor ESP32-2432S028 zijn pin-definities voor het display mogelijk als volgt:
 // Dit zul je moeten verifiëren in de documentatie van het bord.
-#define TFT_CS   15
-#define TFT_RST  -1
-#define TFT_DC   2
-#define TFT_MOSI 13
-#define TFT_CLK  14
-#define TFT_MISO 12
+//#define TFT_CS   15
+//#define TFT_RST  -1
+//#define TFT_DC   2
+//#define TFT_MOSI 13
+//#define TFT_CLK  14
+//#define TFT_MISO 12
 #define TFT_LED  21 // Voor sommige schermen moet je misschien de achtergrondverlichting aanzetten
 
 int touchswitch;

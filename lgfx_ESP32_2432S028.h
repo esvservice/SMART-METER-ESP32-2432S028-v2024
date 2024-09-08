@@ -4,7 +4,7 @@
 //----------------------------------------------------------------------
 class LGFX : public lgfx::LGFX_Device {
     lgfx::Panel_ILI9341 _panel_instance;      // set for ESP32-2432S028 with one USB connector
-//    lgfx::Panel_ST7789 _panel_intance;   // set for new ESP32-2432S028 (2 USB connectors)
+    //lgfx::Panel_ST7789 _panel_instance;   // set for new ESP32-2432S028 (2 USB connectors)
     lgfx::Bus_SPI       _bus_instance;
     lgfx::Light_PWM     _light_instance;
     lgfx::Touch_XPT2046 _touch_instance;

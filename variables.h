@@ -9,7 +9,7 @@
 
 #define SER_BUF_SIZE 256
 
-bool isVersion3 = true;  // Zet deze variabele op true voor versie 3 (ST7789) of false voor versie 1 (ILI9341)
+bool isVersion3 = 1;  // Zet deze variabele op true of 1 voor versie 3 (ST7789) op false of 0 voor versie 1 (ILI9341)
 
 // Voor ESP32-2432S028 zijn pin-definities voor het display mogelijk als volgt:
 // Dit zul je moeten verifiëren in de documentatie van het bord.
@@ -67,7 +67,7 @@ String FreqA;
 String freqA;                   // used for displaying Freq VFOA
 String prevfreqA;               // used for displaying Freq VFOA
 
-String MyipAddress;
+String MyipAddress;             // ipadres when connected with wifi
 
 //Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO); // Invoke custom library
 bool tuneflag = false;

@@ -65,11 +65,7 @@ void setup() {
 	//
 	//-----------------------------------------------------------------------------------------------------------------------//  
 	  // display setup  
-	//tft.setColorDepth(24);
 	tft.begin();
-	//tft.setRotation(1);										 // set display orientation
-	//tft.invertDisplay(0);
-	
 	//-----------------------------------------------------------------------------------------------------------------------//   
 	//touchscreen activeren
 	touch.begin();
@@ -87,23 +83,20 @@ void setup() {
 	tft.println("by");
 	tft.setCursor(40, 140);
 	tft.setTextColor(SILVER);
-	tft.println("Jess - ON4JES");
+	tft.println("ON4JES & ON7LSP ");
 	tft.setCursor(230, 220);
 	tft.setTextSize(1);
 	tft.println("v1234.T");
 	delay(2000);                                             // show welcome screen for 2000 mS
 	//-----------------------------------------------------------------------------------------------------------------------//  
-	//tft.fillScreen(BACKGROUND);                             // fill background with selected color
-	// tft.fillScreen(BLACK);
-	//tft.setTextSize(1);                                             // small text
-	//-----------------------------------------------------------------------------------------------------------------------//  
-
+	
 	//Draw screen1 scherm met meters inladen    // now first draw most meter outlines with their scale text and colors       //
 	
 	wifisetup32();              //WifiManager.ino
 	screen1text();				//display.ino
 	draw_radio_screen();			//display.ino
 	show_status();				//display.ino
+	
 
 	//-----------------------------------------------------------------------------------------------------------------------//  
 }

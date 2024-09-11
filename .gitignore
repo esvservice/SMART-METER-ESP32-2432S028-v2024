@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /__vm/.SMART-METER-ESP32-2432S028-v2024.vsarduino.h
+/SMART-METER-ESP32-2432S028 v2024.vcxproj

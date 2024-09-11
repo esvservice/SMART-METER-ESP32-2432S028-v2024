@@ -14,7 +14,7 @@
   On button release: it disables the TX and restores original power and mode settings.
   This software is written by Versailles Jess, ON4JES and is in the public domain.
   You must set the transceiver's RS232 connection to 38400 bps.
-  This is version 1.0 first release, only tested on a FT-991a, but it should also work on a FT-991.
+  This is version 1234.T first release, only tested on a FT-991a, but it should also work on a FT-991.
 
   bij opstart eerst wifisettings invullen
   hotspotnaam: SmartMeter 

@@ -9,7 +9,7 @@
 
 #define SER_BUF_SIZE 256
 
-
+bool isVersion3 = true;  // Zet deze variabele op true voor versie 3 (ST7789) of false voor versie 1 (ILI9341)
 
 // Voor ESP32-2432S028 zijn pin-definities voor het display mogelijk als volgt:
 // Dit zul je moeten verifiëren in de documentatie van het bord.

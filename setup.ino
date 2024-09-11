@@ -65,10 +65,10 @@ void setup() {
 	//
 	//-----------------------------------------------------------------------------------------------------------------------//  
 	  // display setup  
-	tft.setColorDepth(24);
+	//tft.setColorDepth(24);
 	tft.begin();
-	tft.setRotation(1);										 // set display orientation
-	tft.invertDisplay(0);
+	//tft.setRotation(1);										 // set display orientation
+	//tft.invertDisplay(0);
 	
 	//-----------------------------------------------------------------------------------------------------------------------//   
 	//touchscreen activeren

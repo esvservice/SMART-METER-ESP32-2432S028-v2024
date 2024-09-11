@@ -27,7 +27,6 @@ void TouchScreen() {
     if (tuneflag == true) {
         if ((xt > 180 && xt < 240) && (yt > 180 && yt < 240)) {
             // code if both statements are true
-            wifisetup32(); // zorgt ervoor dat er een wifireset gebeurt => WifiManager32.ino
             screen1text();
             draw_radio_screen();
             show_status();

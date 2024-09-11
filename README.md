@@ -1,6 +1,9 @@
 Name:		SMART_METER_ESP32_2432S028_v2024.ino
+
 Created:	2024 and also under construction
+
 Author:	ON4JES / ON7LSP / ON3VNA
+
 
  This is a sketch for 7 bargraph meters on a 240 x 320, 2.8 TFT display (touch is not used) with ILI9341 for the Yaesu FT-991a (and FT-991).
  Make sure your display uses the ILI9341 driver, otherwise it will not work.
@@ -16,8 +19,11 @@ Author:	ON4JES / ON7LSP / ON3VNA
  This is version 1234.T first release, only tested on a FT-991a, but it should also work on a FT-991.
 
  bij opstart eerst wifisettings invullen
+ 
  hotspotnaam: SmartMeter 
+ 
  Wachtwoord: smartadmin
+ 
 
  Daarna als deze correct zijn heb je toegang tot de webserver van de SmartMeter => 192.168.0.***
  todo jess => ipadres laten verschijnen op display van de webserver

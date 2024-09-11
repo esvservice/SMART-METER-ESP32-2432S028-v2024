@@ -26,4 +26,5 @@ Author:	ON4JES / ON7LSP / ON3VNA
  
 
  Daarna als deze correct zijn heb je toegang tot de webserver van de SmartMeter => 192.168.0.***
+ 
  todo jess => ipadres laten verschijnen op display van de webserver

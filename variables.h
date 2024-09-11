@@ -67,6 +67,7 @@ String FreqA;
 String freqA;                   // used for displaying Freq VFOA
 String prevfreqA;               // used for displaying Freq VFOA
 
+String MyipAddress;
 
 //Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO); // Invoke custom library
 bool tuneflag = false;

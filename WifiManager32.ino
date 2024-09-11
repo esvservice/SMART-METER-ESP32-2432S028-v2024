@@ -30,6 +30,9 @@ static void wifisetup32() {
     else {
         //if you get here you have connected to the WiFi    
         Serial.println("connected...yeey :)");
+        // If connection is successful, get the IP address
+        MyipAddress = WiFi.localIP().toString();
+        screen1text();
 
         // Start de webserver
         server.on("/", handleRoot); // Deze functie wordt uitgevoerd bij toegang tot de root van het IP-adres

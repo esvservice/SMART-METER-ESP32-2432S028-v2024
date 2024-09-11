@@ -6,8 +6,8 @@ void screen1text() {
     //print the text in the upper part of the display
     tft.setCursor((X + 40), (Y - 10));
     tft.setTextColor(GOLD);
-    tft.println("FT-991(a) SMART DISPLAY");
-
+    //tft.println("FT-991(a) SMART DISPLAY");
+    tft.println("FT-991/a SMART DISPLAY " + MyipAddress);
 
     // print the text- connection status & Power set to
     tft.setCursor((X - 45), 82);

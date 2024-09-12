@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		WifiManager32.ino = WifiManager32.ino
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArduinoJson-7.1.0", "Libraries\ArduinoJson\7.1.0\ArduinoJson\ArduinoJson-7.1.0.vcxitems", "{E6C84440-51F5-4675-A577-F80CEE760DD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -81,10 +83,12 @@ Global
 		Libraries\XPT2046_Touchscreen\1.4\XPT2046_Touchscreen\XPT2046_Touchscreen-1.4.vcxitems*{78046aad-39d2-4c48-988b-2735a04eab5a}*SharedItemsImports = 9
 		Libraries\WebServer\3.0.4\WebServer\WebServer-3.0.4.vcxitems*{83642f45-5e8a-4316-99b1-a61e03f6e7dc}*SharedItemsImports = 9
 		Libraries\LovyanGFX\1.1.16\LovyanGFX\LovyanGFX-1.1.16.vcxitems*{b3ad1804-e529-4b7f-8476-adb4a31b730c}*SharedItemsImports = 9
+		Libraries\ArduinoJson\7.1.0\ArduinoJson\ArduinoJson-7.1.0.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
 		Libraries\LovyanGFX\1.1.16\LovyanGFX\LovyanGFX-1.1.16.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
 		Libraries\WebServer\3.0.4\WebServer\WebServer-3.0.4.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
 		Libraries\WiFiManager-master\2.0.17\WiFiManager-master\WiFiManager-master-2.0.17.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
 		Libraries\WiFi\3.0.4\WiFi\WiFi-3.0.4.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
 		Libraries\XPT2046_Touchscreen\1.4\XPT2046_Touchscreen\XPT2046_Touchscreen-1.4.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
+		Libraries\ArduinoJson\7.1.0\ArduinoJson\ArduinoJson-7.1.0.vcxitems*{e6c84440-51f5-4675-a577-f80cee760dd6}*SharedItemsImports = 9
 	EndGlobalSection
 EndGlobal

@@ -36,14 +36,19 @@ static void wifisetup32() {
         screen1text(); // refresh screen
 
         // Start de webserver
-        server.on("/", handleRoot); // Deze functie wordt uitgevoerd bij toegang tot de root van het IP-adres
+        //server.on("/", handleRoot); // Deze functie wordt uitgevoerd bij toegang tot de root van het IP-adres
+        server.on("/", handleMeterPage);    // Webpagina met meters
         server.begin(); // Start de webserver
         Serial.println("Webserver gestart.");
     }
     
     
     // Stel de root route in
-    server.on("/", handleRoot);
+    server.on("/terminal", handleRoot);
+
+    // Webserver routes
+    server.on("/", handleMeterPage);    // Webpagina met meters
+    server.on("/values", handleGetValues); // JSON met meterwaarden
 
     // Stel de reset route in voor WiFi-instellingen
     server.on("/reset", HTTP_POST, handleReset);

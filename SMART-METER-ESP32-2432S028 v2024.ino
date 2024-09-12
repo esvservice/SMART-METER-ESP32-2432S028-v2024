@@ -35,6 +35,7 @@
 #include "WiFi.h"
 #include "WifiManager.h"
 #include "WebServer.h"    // WebServer library for hosting a simple web page on ESP32
+#include "ArduinoJson.h"  // JSON library for sending data
 #include "stdio.h"     
 #pragma GCC optimize ("Ofast")
 #define LGFX_USE_V1
@@ -49,7 +50,7 @@
 WebServer server(80); // Creëer een WebServer object op poort 80
 
 
-// Functie voor de root (homepage)
+// Functie voor de terminal (homepage)
 void handleRoot() {
     String html = "<html><head>";
 
@@ -121,6 +122,136 @@ void handleReset() {
     wm.resetSettings(); // Wis de WiFi-instellingen
     ESP.restart();      // Herstart de ESP32
 }
+
+
+// Functie om meterwaarden als JSON te verzenden
+void handleGetValues() {
+    // Maak een JSON-object om de waarden op te slaan
+    StaticJsonDocument<200> json;
+    json["SWR"] = SWR;
+    json["Comp"] = Comp;
+    json["IDD"] = IDD;
+    json["VDD"] = VDD;
+    json["ALC"] = ALC;
+    json["SMM"] = SMM;
+    json["PO"] = PO;
+    json["in_tx"] = in_tx;
+
+    String jsonOutput;
+    serializeJson(json, jsonOutput);
+
+    // Verstuur de JSON-data
+    server.send(200, "application/json", jsonOutput);
+}
+
+// Root HTML-pagina met meters met AJAX om de waarden te verversen
+void handleMeterPage() {
+    String html = "<html><head>";
+    html += "<style>";
+
+    // Algemene pagina opmaak (Dark Mode)
+    html += "body { background-color: #1e1e1e; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }";
+
+    // Taakbalk layout
+    html += ".navbar { background-color: #333333; padding: 10px; display: flex; justify-content: space-around; align-items: center; }";
+    html += ".navbar button { background-color: #007acc; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }";
+    html += ".navbar button:hover { background-color: #005f9e; }"; // Hover effect
+
+    // Dashboard layout
+    html += ".dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 40px; }";
+
+    // Kaartjes (meter-containers)
+    html += ".card { background-color: #252526; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }";
+
+    // Titel van het dashboard
+    html += ".dashboard h1 { grid-column: span 2; font-size: 36px; text-align: center; margin-bottom: 20px; }";
+
+    // Meter stijl
+    html += ".meter { width: 100%; height: 30px; background-color: #333; border-radius: 15px; position: relative; margin-top: 10px; }";
+    html += ".progress { height: 100%; border-radius: 15px; transition: width 0.5s ease; }";
+
+    // Specifieke meter kleuren
+    html += "#swr .progress { background-color: #4caf50; }";     // Groen voor SWR
+    html += "#comp .progress { background-color: #ffeb3b; }";    // Geel voor COMP
+    html += "#idd .progress { background-color: #2196f3; }";     // Blauw voor IDD
+    html += "#vdd .progress { background-color: #03a9f4; }";     // Lichter blauw voor VDD
+    html += "#alc .progress { background-color: #ff9800; }";     // Oranje voor ALC
+    html += "#smm .progress { background-color: #8bc34a; }";     // Groene kleur voor S meter
+    html += "#po .progress { background-color: #00bcd4; }";      // Blauw voor PO meter
+
+    // Schaduwen en transities
+    html += ".meter, .progress { box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6); }";
+
+    html += "</style>";
+
+    // JavaScript voor AJAX updates
+    html += "<script>";
+    html += "function updateMeters(data) {";
+    html += "document.getElementById('swr-progress').style.width = data.SWR * 100 / 255 + '%';";
+    html += "document.getElementById('comp-progress').style.width = data.Comp * 100 / 255 + '%';";
+    html += "document.getElementById('idd-progress').style.width = data.IDD * 100 / 255 + '%';";
+    html += "document.getElementById('vdd-progress').style.width = data.VDD * 100 / 255 + '%';";
+    html += "document.getElementById('alc-progress').style.width = data.ALC * 100 / 255 + '%';";
+    html += "if (!data.in_tx) { document.getElementById('smm-progress').style.width = data.SMM * 100 / 255 + '%'; }";
+    html += "else { document.getElementById('po-progress').style.width = data.PO * 100 / 255 + '%'; }";
+    html += "}";
+    html += "function fetchData() {";
+    html += "fetch('/values').then(response => response.json()).then(data => updateMeters(data));";
+    html += "}";
+    html += "setInterval(fetchData, 10);";  // Update snel
+    html += "</script></head><body>";
+
+    // Taakbalk container met knoppen
+    html += "<div class='navbar'>";
+    // Knop om WiFi-instellingen te wissen
+    html += "<form action='/reset' method='POST' style='display:inline-block;'>";
+    html += "<button type='submit'>Delete your WiFi Settings</button>";
+    html += "</form>";
+
+    // Toekomstige knoppen kunnen hier worden toegevoegd
+    html += "</div>";  // Einde van navbar
+
+    // Dashboard container
+    html += "<div class='dashboard'>";
+
+    // Titel
+    html += "<h1>SMART DISPLAY Dashboard</h1>";
+
+    // SWR meter
+    html += "<div class='card'><h3>SWR Meter</h3>";
+    html += "<div id='swr' class='meter'><div id='swr-progress' class='progress'></div></div></div>";
+
+    // COMP meter
+    html += "<div class='card'><h3>COMP Meter</h3>";
+    html += "<div id='comp' class='meter'><div id='comp-progress' class='progress'></div></div></div>";
+
+    // IDD meter
+    html += "<div class='card'><h3>IDD Meter</h3>";
+    html += "<div id='idd' class='meter'><div id='idd-progress' class='progress'></div></div></div>";
+
+    // VDD meter
+    html += "<div class='card'><h3>VDD Meter</h3>";
+    html += "<div id='vdd' class='meter'><div id='vdd-progress' class='progress'></div></div></div>";
+
+    // ALC meter
+    html += "<div class='card'><h3>ALC Meter</h3>";
+    html += "<div id='alc' class='meter'><div id='alc-progress' class='progress'></div></div></div>";
+
+    // S Meter (RX) of PO Meter (TX)
+    html += "<div class='card'><h3>S Meter (RX)</h3>";
+    html += "<div id='smm' class='meter'><div id='smm-progress' class='progress'></div></div></div>";
+
+    html += "<div class='card'><h3>PO Meter (TX)</h3>";
+    html += "<div id='po' class='meter'><div id='po-progress' class='progress'></div></div></div>";
+
+    html += "</div>";  // Einde van dashboard container
+
+    html += "</body></html>";
+    server.send(200, "text/html", html);
+}
+
+
+
 
 
 void loop() {

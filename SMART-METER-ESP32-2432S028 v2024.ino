@@ -160,14 +160,17 @@ void handleMeterPage() {
     // Dashboard layout
     html += ".dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 40px; }";
 
-    // Kaartjes (meter-containers)
-    html += ".card { background-color: #252526; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }";
+    // Kaartjes (meter-containers) iets kleiner gemaakt
+    html += ".card { background-color: #252526; border-radius: 12px; padding: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative; }";
 
     // Titel van het dashboard
-    html += ".dashboard h1 { grid-column: span 2; font-size: 36px; text-align: center; margin-bottom: 20px; }";
+    html += ".dashboard h1 { grid-column: span 2; font-size: 32px; text-align: center; margin-bottom: 20px; }";  // Iets kleinere titel
 
-    // Meter stijl
-    html += ".meter { width: 100%; height: 30px; background-color: #333; border-radius: 15px; position: relative; margin-top: 10px; }";
+    // Meter schaalverdeling IN de balk
+    html += ".scale { font-size: 12px; color: white; position: absolute; top: -20px; width: 100%; display: flex; justify-content: space-between; }";  // Schaal in de balk
+
+    // Meter stijl (kleiner gemaakt)
+    html += ".meter { width: 100%; height: 20px; background-color: #333; border-radius: 15px; position: relative; margin-top: 15px; }";
     html += ".progress { height: 100%; border-radius: 15px; transition: width 0.5s ease; }";
 
     // Specifieke meter kleuren
@@ -181,6 +184,11 @@ void handleMeterPage() {
 
     // Schaduwen en transities
     html += ".meter, .progress { box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6); }";
+
+    // Specifieke stijlen voor aangepaste kleuren en markeringen
+    html += ".red { color: red; }";
+    html += ".yellow { color: yellow; }";
+    html += ".circled { border: 2px solid green; border-radius: 50%; padding: 2px; background-color: green; color: red; }";  // Omcirkelde en gevulde tekst
 
     html += "</style>";
 
@@ -198,7 +206,7 @@ void handleMeterPage() {
     html += "function fetchData() {";
     html += "fetch('/values').then(response => response.json()).then(data => updateMeters(data));";
     html += "}";
-    html += "setInterval(fetchData, 10);";  // Update snel
+    html += "setInterval(fetchData, 10);";  // Update elke 10ms
     html += "</script></head><body>";
 
     // Taakbalk container met knoppen
@@ -207,48 +215,59 @@ void handleMeterPage() {
     html += "<form action='/reset' method='POST' style='display:inline-block;'>";
     html += "<button type='submit'>Delete your WiFi Settings</button>";
     html += "</form>";
-
-    // Toekomstige knoppen kunnen hier worden toegevoegd
     html += "</div>";  // Einde van navbar
 
     // Dashboard container
     html += "<div class='dashboard'>";
 
     // Titel
-    html += "<h1>SMART DISPLAY Dashboard</h1>";
+    html += "<h1>SMART METER DASHBOARD</h1>";
 
-    // SWR meter
+    // SWR meter met schaal in de balk
     html += "<div class='card'><h3>SWR Meter</h3>";
-    html += "<div id='swr' class='meter'><div id='swr-progress' class='progress'></div></div></div>";
+    html += "<div class='meter' id='swr'><div class='scale'><span>1</span><span>1.5</span><span>2</span><span class='yellow'>3</span><span class='red'>5</span><span class='red'>&#8734;</span></div>";
+    html += "<div id='swr-progress' class='progress'></div></div></div>";
 
-    // COMP meter
+    // COMP meter met schaal in de balk
     html += "<div class='card'><h3>COMP Meter</h3>";
-    html += "<div id='comp' class='meter'><div id='comp-progress' class='progress'></div></div></div>";
+    html += "<div class='meter' id='comp'><div class='scale'><span>0</span><span>5</span><span class='yellow'>10</span><span class='yellow'>15</span><span class='red'>20</span></div>";
+    html += "<div id='comp-progress' class='progress'></div></div></div>";
 
-    // IDD meter
+    // IDD meter met schaal in de balk
     html += "<div class='card'><h3>IDD Meter</h3>";
-    html += "<div id='idd' class='meter'><div id='idd-progress' class='progress'></div></div></div>";
+    html += "<div class='meter' id='idd'><div class='scale'><span>0</span><span>5</span><span>10</span><span>15</span><span>20</span><span>25</span><span>A</span></div>";
+    html += "<div id='idd-progress' class='progress'></div></div></div>";
 
-    // VDD meter
+    // VDD meter met schaal in de balk, 13.8 in rood en volledig omcirkeld en gevuld met groen
     html += "<div class='card'><h3>VDD Meter</h3>";
-    html += "<div id='vdd' class='meter'><div id='vdd-progress' class='progress'></div></div></div>";
+    html += "<div class='meter' id='vdd'><div class='scale'><span>12</span><span>13</span><span class='circled'>13.8</span><span>V</span></div>";
+    html += "<div id='vdd-progress' class='progress'></div></div></div>";
 
-    // ALC meter
+    // ALC meter met schaal in de balk
     html += "<div class='card'><h3>ALC Meter</h3>";
-    html += "<div id='alc' class='meter'><div id='alc-progress' class='progress'></div></div></div>";
+    html += "<div class='meter' id='alc'><div class='scale'><span>0</span><span>70</span><span>100</span></div>";
+    html += "<div id='alc-progress' class='progress'></div></div></div>";
 
-    // S Meter (RX) of PO Meter (TX)
+    // S Meter (RX) met aangepaste kleuren voor 20, 40 en 60, schaal in de balk
     html += "<div class='card'><h3>S Meter (RX)</h3>";
-    html += "<div id='smm' class='meter'><div id='smm-progress' class='progress'></div></div></div>";
+    html += "<div class='meter' id='smm'><div class='scale'><span>1</span><span>2</span><span>3</span><span>5</span><span>7</span><span>9</span><span class='red'>20</span><span class='red'>40</span><span class='red'>60</span></div>";
+    html += "<div id='smm-progress' class='progress'></div></div></div>";
 
+    // PO Meter (TX) met schaal in de balk
     html += "<div class='card'><h3>PO Meter (TX)</h3>";
-    html += "<div id='po' class='meter'><div id='po-progress' class='progress'></div></div></div>";
+    html += "<div class='meter' id='po'><div class='scale'><span>0</span><span>10</span><span>50</span><span>100</span><span>150</span><span>W</span></div>";
+    html += "<div id='po-progress' class='progress'></div></div></div>";
 
     html += "</div>";  // Einde van dashboard container
 
     html += "</body></html>";
     server.send(200, "text/html", html);
 }
+
+
+
+
+
 
 
 

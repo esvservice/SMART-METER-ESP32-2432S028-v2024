@@ -125,7 +125,7 @@ void cat()
     FreqA = CAT_buffer;                                          // present setting to freqasetting
     if (prevfreqA != FreqA)                               // if setting has changed since last read
     {
-        tft.setTextColor(SILVER);
+        tft.setTextColor(WHITE);
         tft.fillRect((X - 44), -10, (60), 30, BLACK); // clear previous display
         tft.setCursor((X - 44), (Y - 10));
         tft.setTextSize(1);

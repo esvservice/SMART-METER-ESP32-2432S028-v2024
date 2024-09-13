@@ -78,7 +78,7 @@ void setup() {
 	tft.setTextSize(2);
 	tft.println("SMART DISPLAY ");
 	tft.setCursor(16, 80);
-	tft.println("for FT-991(a)");
+	tft.println("    for FT-991(a)");
 	tft.setCursor(150, 110);
 	tft.println("by");
 	tft.setCursor(40, 140);

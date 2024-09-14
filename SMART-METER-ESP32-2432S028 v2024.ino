@@ -136,6 +136,7 @@ void handleGetValues() {
     json["SMM"] = SMM;
     json["PO"] = PO;
     json["in_tx"] = in_tx;
+    json["FreqA"] = FreqA;  // Voeg FreqA toe aan het JSON-object
 
     String jsonOutput;
     serializeJson(json, jsonOutput);
@@ -166,6 +167,9 @@ void handleMeterPage() {
     // Titel van het dashboard
     html += ".dashboard h1 { grid-column: span 2; font-size: 32px; text-align: center; margin-bottom: 20px; }";  // Iets kleinere titel
 
+    // Frequentie venster (groot en goudkleurig)
+    html += ".freq-display { grid-column: span 2; text-align: center; color: #FFD700; font-size: 40px; font-weight: bold; padding: 20px; background-color: #333; border-radius: 10px; margin-bottom: 20px; }";
+
     // Meter schaalverdeling IN de balk
     html += ".scale { font-size: 12px; color: white; position: absolute; top: -20px; width: 100%; display: flex; justify-content: space-between; }";  // Schaal in de balk
 
@@ -195,6 +199,7 @@ void handleMeterPage() {
     // JavaScript voor AJAX updates
     html += "<script>";
     html += "function updateMeters(data) {";
+    html += "document.getElementById('freq-display').innerText = data.FreqA + ' Hz';";  // Update FreqA
     html += "document.getElementById('swr-progress').style.width = data.SWR * 100 / 255 + '%';";
     html += "document.getElementById('comp-progress').style.width = data.Comp * 100 / 255 + '%';";
     html += "document.getElementById('idd-progress').style.width = data.IDD * 100 / 255 + '%';";
@@ -220,8 +225,8 @@ void handleMeterPage() {
     // Dashboard container
     html += "<div class='dashboard'>";
 
-    // Titel
-    html += "<h1>SMART METER DASHBOARD</h1>";
+    // Frequentievenster
+    html += "<div id='freq-display' class='freq-display'>Loading...</div>";
 
     // SWR meter met schaal in de balk
     html += "<div class='card'><h3>SWR Meter</h3>";
@@ -263,6 +268,7 @@ void handleMeterPage() {
     html += "</body></html>";
     server.send(200, "text/html", html);
 }
+
 
 
 

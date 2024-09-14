@@ -14,7 +14,7 @@ Author:	ON4JES / ON7LSP / ON3VNA
  It also has an external tune button possibility. Just add a momentary pushbutton (if desired).
  On button press: it reads present power and mode setting, then sets PWR to a selected value, mode to FM-N, then enables the MOX.
  On button release: it disables the TX and restores original power and mode settings.
- This software is written by Versailles Jess, ON4JES and is in the public domain.
+ This software is a project written by ON4JES & ON7LSP and is in the public domain.
  You must set the transceiver's RS232 connection to 38400 bps.
  This is version 1234.T first release, only tested on a FT-991a, but it should also work on a FT-991.
 

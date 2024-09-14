@@ -191,7 +191,7 @@ void handleMeterPage() {
 
     html += "</style>";
 
-    // JavaScript voor AJAX updates
+    // JavaScript voor AJAX updates //
     html += "<script>";
     html += "function formatFrequency(freq) {";
     html += "  if (freq >= 1000000) {";

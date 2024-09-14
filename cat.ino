@@ -38,8 +38,10 @@ void cat()
         if (main_flag1 == false) {                                      // clear area and write the text S, but only once to reduce flicker
             tft.fillRect((X - 44), (Y + 172), 42, 20, BLACK);     // clear the text area
             tft.setCursor(Z, (Y + 178));
-            tft.setTextColor(WHITE);                              // set textcolor to white
-            tft.println("S");                                             // display text of receiver meter bar
+            tft.setTextColor(SILVER);                              // set textcolor to white
+            tft.setTextSize(2);
+            tft.println("  S");          // display text of receiver meter bar
+            tft.setTextSize(1);                                             // display text of receiver meter bar
         }
         main_flag1 = true;                                              // flag so that text and clear is only written once, toggle function
         main_flag2 = true;                                              // flag so that text and clear is only written once, toggle function

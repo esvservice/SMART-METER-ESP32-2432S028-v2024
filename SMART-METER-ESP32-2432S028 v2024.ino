@@ -155,10 +155,11 @@ void handleMeterPage() {
     html += "body { background-color: #1e1e1e; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }";
 
     // Display layout voor VFO-A en VFO-B (bovenaan)
-    html += ".vfo-display { display: flex; justify-content: center; padding: 20px; background-color: #111; }";
-    html += ".vfo-display .vfo { margin: 0 20px; text-align: center; padding: 15px; background-color: #333; border-radius: 12px; width: 800px; }";
-    html += ".vfo-display .vfo h2 { font-size: 16px; margin-bottom: 10px; color: #00ff00; }";  // Groene kleur voor titel
-    html += ".vfo-display .vfo .freq { font-size: 48px; font-weight: bold; color: #FFD700; }";  // Goudkleurige frequentie
+    html += ".vfo-display { display: flex; justify-content: space-around; padding: 20px; background-color: #111; }";
+    html += ".vfo-display .vfo { flex-grow: 1; position: relative; padding: 15px; background-color: #333; border-radius: 12px; }";
+    html += ".vfo-display .vfo h2 { position: absolute; top: 10px; left: 15px; font-size: 16px; margin: 0; color: #00ff00; }";  // Groene kleur voor titel
+    html += ".vfo-display .vfo .freq { text-align: center; margin-top: 40px; font-size: 48px; font-weight: bold; color: #FFD700; }";  // Goudkleurige frequentie
+    html += ".vfo-display .vfo .freq .small { font-size: 24px; }";  // Kleiner font voor laatste twee cijfers
 
     // Taakbalk layout
     html += ".navbar { background-color: #333333; padding: 10px; display: flex; justify-content: space-around; align-items: center; }";
@@ -192,16 +193,27 @@ void handleMeterPage() {
 
     // JavaScript voor AJAX updates
     html += "<script>";
+    html += "function formatFrequency(freq) {";
+    html += "  if (freq >= 1000000) {";
+    html += "    let freqMHz = (freq / 1000000).toFixed(6);";
+    html += "    let mainPart = freqMHz.slice(0, -3);";
+    html += "    let smallPart = freqMHz.slice(-3);";
+    html += "    return mainPart + '<span class=\"small\">' + smallPart + '</span> Mhz';";
+    html += "  } else {";
+    html += "    return freq + ' Hz';";
+    html += "  }";
+    html += "}";
+
     html += "function updateMeters(data) {";
-    html += "document.getElementById('freq-display_A').innerText = data.FreqA + ' Hz';";
-    html += "document.getElementById('freq-display_B').innerText = data.FreqB + ' Hz';";
-    html += "document.getElementById('swr-progress').style.width = data.SWR * 100 / 255 + '%';";
-    html += "document.getElementById('comp-progress').style.width = data.Comp * 100 / 255 + '%';";
-    html += "document.getElementById('idd-progress').style.width = data.IDD * 100 / 255 + '%';";
-    html += "document.getElementById('vdd-progress').style.width = data.VDD * 100 / 255 + '%';";
-    html += "document.getElementById('alc-progress').style.width = data.ALC * 100 / 255 + '%';";
-    html += "if (!data.in_tx) { document.getElementById('smm-progress').style.width = data.SMM * 100 / 255 + '%'; }";
-    html += "else { document.getElementById('po-progress').style.width = data.PO * 100 / 255 + '%'; }";
+    html += "  document.getElementById('freq-display_A').innerHTML = formatFrequency(data.FreqA);";
+    html += "  document.getElementById('freq-display_B').innerHTML = formatFrequency(data.FreqB);";
+    html += "  document.getElementById('swr-progress').style.width = data.SWR * 100 / 255 + '%';";
+    html += "  document.getElementById('comp-progress').style.width = data.Comp * 100 / 255 + '%';";
+    html += "  document.getElementById('idd-progress').style.width = data.IDD * 100 / 255 + '%';";
+    html += "  document.getElementById('vdd-progress').style.width = data.VDD * 100 / 255 + '%';";
+    html += "  document.getElementById('alc-progress').style.width = data.ALC * 100 / 255 + '%';";
+    html += "  if (!data.in_tx) { document.getElementById('smm-progress').style.width = data.SMM * 100 / 255 + '%'; }";
+    html += "  else { document.getElementById('po-progress').style.width = data.PO * 100 / 255 + '%'; }";
     html += "}";
     html += "function fetchData() {";
     html += "fetch('/values').then(response => response.json()).then(data => updateMeters(data));";
@@ -215,14 +227,12 @@ void handleMeterPage() {
     html += "<button type='submit'>Delete WiFi Settings</button>";
     html += "</form>";
     html += "</div>";  // Einde van navbar
-    
+
     // VFO Displays (bovenaan)
     html += "<div class='vfo-display'>";
     html += "<div class='vfo'><h2>VFO-A</h2><div id='freq-display_A' class='freq'>Loading...</div></div>";
     html += "<div class='vfo'><h2>VFO-B</h2><div id='freq-display_B' class='freq'>Loading...</div></div>";
     html += "</div>";
-
-    
 
     // Dashboard met meters
     html += "<div class='dashboard'>";
@@ -267,6 +277,9 @@ void handleMeterPage() {
     html += "</body></html>";
     server.send(200, "text/html", html);
 }
+
+
+
 
 
 

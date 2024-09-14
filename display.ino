@@ -58,7 +58,7 @@ void draw_radio_screen() {
 
 void draw_M_S1_meter()
 {
-    tft.drawRoundRect(0, 23, 319, 195, 7, WHITE);  // Omkadering meters
+    tft.drawRoundRect(0, 23, 319, 195, 7, GOLD);  // Omkadering meters
 
     //Draw S meter, the S meter can be substituted by the PO meter
 

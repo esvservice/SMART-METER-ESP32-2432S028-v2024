@@ -17,7 +17,7 @@
   This is version 1234.T first release, only tested on a FT-991a, but it should also work on a FT-991.
 
   bij opstart eerst wifisettings invullen
-  hotspotnaam: SmartMeter 
+  hotspotnaam: SmartMeter
   Wachtwoord: smartadmin
 
   Daarna als deze correct zijn heb je toegang tot de webserver van de SmartMeter => 192.168.0.***

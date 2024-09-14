@@ -266,9 +266,7 @@ void draw_VDD_meter() {
     tft.drawRect((X - 45), (Y + 106), 44, 23, BLACK);        // draw rectangular around the text
     tft.fillRect(X, (Y + 107), 244, 4, GREEN);
 
-    //  tft.fillRect((X + 178), (Y + 107), (X - 25), 12, GREEN,YELLOW);
-
-    tft.fillRect((X + 178), (Y + 107), (X - 25), 12, GREEN);// bar indicating allowed tolerance of VDD in greenyellow
+    tft.fillRect((X + 178), (Y + 107), (X - 25), 12, GREEN); // bar indicating allowed tolerance of VDD in greenyellow
     tft.setTextColor(RED);                                   // textcolor set to red
     tft.setCursor((X + 180), Y + 109);
     tft.println("13.8");                                             // display VDD = 13.8 scale text in red

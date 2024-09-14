@@ -29,10 +29,10 @@ void show_status() {                            // this routine shows a red or g
 
     //tft.drawCircle(5, 11, 6, BLACK);         // outline of circle is black
     if (constatus == false) {
-        tft.fillCircle(5,10, 3, RED);         // red led if status is false (75 + X, 85, 4, RED);
+        tft.fillCircle(5,11, 3, RED);         // red led if status is false (75 + X, 85, 4, RED);
     }
     else {
-        tft.fillCircle(5,10, 3, GREEN);       // green led if status is true
+        tft.fillCircle(5,11, 3, GREEN);       // green led if status is true
     }
 }
 
@@ -58,7 +58,7 @@ void draw_radio_screen() {
 
 void draw_M_S1_meter()
 {
-    tft.drawRoundRect(0, 23, 319, 195, 7, WHITE);  // Omkadering meters
+    tft.drawRoundRect(0, 23, 319, 195, 7, GOLD);  // Omkadering meters
 
     //Draw S meter, the S meter can be substituted by the PO meter
 
@@ -267,7 +267,7 @@ void draw_VDD_meter() {
     tft.fillRect(X, (Y + 107), 244, 4, GREEN);
 
     tft.fillRect((X + 178), (Y + 107), (X - 25), 12, GREEN); // bar indicating allowed tolerance of VDD in greenyellow
-    tft.setTextColor(RED);                                   // textcolor set to red
+    tft.setTextColor(BLACK);                                   // textcolor set to RED
     tft.setCursor((X + 180), Y + 109);
     tft.println("13.8");                                             // display VDD = 13.8 scale text in red
     tft.setTextColor(WHITE);                                 // make text  = V white
@@ -398,7 +398,7 @@ void Display()
         if (VDD < pVDD) {
             tft.fillRect((X + VDD), (Y + 120), (255 - VDD), H, BLACK);  // if new value < previous value, clear the bar partly. not whole bar but from value to 255, reduces flicker
         }                                                                     // if new value is higher than previous value, just add to the bar
-        tft.fillRect(X, (Y + 120), VDD, H, BLUE);                     // VDD, startpoint,row,value,height of bar
+        tft.fillRect(X, (Y + 120), VDD, H, ILI9341_BACKGROUND);                     // VDD, startpoint,row,value,height of bar
         pVDD = VDD;                                                           // store measured VDD value as previous value
     }
 

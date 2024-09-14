@@ -158,8 +158,8 @@ void handleMeterPage() {
     html += ".vfo-display { display: flex; justify-content: space-around; padding: 20px; background-color: #111; }";
     html += ".vfo-display .vfo { flex-grow: 1; position: relative; padding: 15px; background-color: #333; border-radius: 12px; }";
     html += ".vfo-display .vfo h2 { position: absolute; top: 10px; left: 15px; font-size: 16px; margin: 0; color: #00ff00; }";  // Groene kleur voor titel
-    html += ".vfo-display .vfo .freq { text-align: center; margin-top: 40px; font-size: 48px; font-weight: bold; color: #FFD700; }";  // Goudkleurige frequentie
-    html += ".vfo-display .vfo .freq .small { font-size: 24px; }";  // Kleiner font voor laatste twee cijfers
+    html += ".vfo-display .vfo .freq { display: flex; align-items: center; justify-content: center; width: 100%; height: 100px; font-size: 5vw; font-weight: bold; color: #FFD700; }";  // Autosize met 5vw
+    html += ".vfo-display .vfo .freq .small { font-size: 0.5em; }";  // Kleiner font voor laatste twee cijfers
 
     // Taakbalk layout
     html += ".navbar { background-color: #333333; padding: 10px; display: flex; justify-content: space-around; align-items: center; }";
@@ -167,13 +167,14 @@ void handleMeterPage() {
     html += ".navbar button:hover { background-color: #005f9e; }"; // Hover effect
 
     // Dashboard layout voor de meters
-    html += ".dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 40px; text-align: center; }";
+    html += ".dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 40px; text-align: left; }";
 
     // Kaartjes (meter-containers)
-    html += ".card { background-color: #252526; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); }";
+    html += ".card { background-color: #252526; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); position: relative; }";
+    html += ".card h3 { position: absolute; top: 5px; left: 15px; margin: 0; font-size: 16px; color: #ffffff; }";  // Meter labels
 
     // Meters
-    html += ".meter { width: 100%; height: 20px; background-color: #333; border-radius: 15px; position: relative; margin-top: 15px; }";
+    html += ".meter { width: 100%; height: 20px; background-color: #333; border-radius: 15px; position: relative; margin-top: 30px; }";
     html += ".progress { height: 100%; border-radius: 15px; transition: width 0.5s ease; }";
     html += ".meter, .progress { box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6); }";
 
@@ -188,16 +189,19 @@ void handleMeterPage() {
 
     // Schaalverdeling in meters
     html += ".scale { font-size: 12px; color: white; position: absolute; top: -20px; width: 100%; display: flex; justify-content: space-between; }";
+    html += ".scale span.yellow { color: #ffeb3b; }";  // Geel voor specifieke waarden
+    html += ".scale span.red { color: #ff0000; }";     // Rood voor specifieke waarden
 
     html += "</style>";
 
-    // JavaScript voor AJAX updates //
+    // JavaScript voor AJAX updates
     html += "<script>";
     html += "function formatFrequency(freq) {";
     html += "  if (freq >= 1000000) {";
     html += "    let freqMHz = (freq / 1000000).toFixed(6);";
-    html += "    let mainPart = freqMHz.slice(0, -3);";
-    html += "    let smallPart = freqMHz.slice(-3);";
+    html += "    let parts = freqMHz.split('.');";
+    html += "    let mainPart = parts[0] + '.' + parts[1].slice(0, 3);";
+    html += "    let smallPart = parts[1].slice(3, 5);";
     html += "    return mainPart + '<span class=\"small\">' + smallPart + '</span> Mhz';";
     html += "  } else {";
     html += "    return freq + ' Hz';";
@@ -264,7 +268,7 @@ void handleMeterPage() {
 
     // S Meter (RX)
     html += "<div class='card'><h3>S Meter (RX)</h3>";
-    html += "<div class='meter' id='smm'><div class='scale'><span>1</span><span>2</span><span>3</span><span>5</span><span>7</span><span>9</span><span class='red'>20</span><span class='red'>40</span><span class='red'>60</span></div>";
+    html += "<div class='meter' id='smm'><div class='scale'><span>1</span><span>2</span><span>3</span><span>5</span><span>7</span><span>9</span><span class='red'>+20</span><span class='red'>+40</span><span class='red'>+60</span></div>";
     html += "<div id='smm-progress' class='progress'></div></div></div>";
 
     // PO Meter (TX)
@@ -277,6 +281,7 @@ void handleMeterPage() {
     html += "</body></html>";
     server.send(200, "text/html", html);
 }
+
 
 
 

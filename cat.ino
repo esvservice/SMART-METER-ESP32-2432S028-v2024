@@ -49,7 +49,14 @@ void cat()
     Serial.print("FA;");                                     // send CAT command to the radio, ask comp value
     get_radio_response();                                    // call routine to read from radio
     convert_CAT_buffer();                                    // CAT_buffer holds received string in format: RMNVVV000; N=meternumber, VVV is wanted value
-    freqA = CAT_buffer.toInt();                                // store string as int in freqa to be displayed as text
+    FreqA = CAT_buffer.toInt();                                // store string as int in freqa to be displayed as text
+
+    // read Freq VFO B
+    Serial.print("FB;");                                     // send CAT command to the radio, ask comp value
+    get_radio_response();                                    // call routine to read from radio
+    convert_CAT_buffer();                                    // CAT_buffer holds received string in format: RMNVVV000; N=meternumber, VVV is wanted value
+    FreqB = CAT_buffer.toInt();                              // store string as int in FreqB to be displayed as text
+
 
 
     // read comp meter
@@ -123,7 +130,24 @@ void cat()
     }
 
     FreqA = CAT_buffer;                                          // present setting to freqasetting
-    if (prevfreqA != FreqA)                               // if setting has changed since last read
+
+    Serial.print("FB;");                                              // send CAT command to the radio, ask what power has been set
+    get_radio_response();                                             // call routine to read from radio
+    CAT_buffer.remove(0, 2);                                          // remove characters PC
+    if (CAT_buffer.startsWith("0")) {                                 // remove leading zero if present
+        CAT_buffer.remove(0, 1);
+        if (CAT_buffer.startsWith("0")) {                               // remove leading zero if present
+            CAT_buffer.remove(0, 1);
+        }
+    }
+
+    FreqB = CAT_buffer;                                          // present setting to freqBsetting
+
+
+
+
+
+    if (prevfreqA != FreqA)                                 // if setting has changed since last read
     {
         tft.setTextColor(WHITE);
         tft.fillRect((X - 44), -10, (60), 30, BLACK); // clear previous display

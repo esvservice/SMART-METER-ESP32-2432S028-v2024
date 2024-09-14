@@ -63,9 +63,11 @@ bool in_tx = false;             // status of tx
 String pwrsetting;              // used for displaying power setting
 String prevpwrsetting;          // used for displaying power setting
 
-String FreqA;
-String freqA;                   // used for displaying Freq VFOA
+String FreqA;					// used for displaying Freq VFOA
 String prevfreqA;               // used for displaying Freq VFOA
+
+String FreqB;					// used for displaying Freq VFOB
+String prevfreqB;				// used for displaying Freq VFOB
 
 String MyipAddress;             // ipadres when connected with wifi
 

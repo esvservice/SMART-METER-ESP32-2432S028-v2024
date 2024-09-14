@@ -137,6 +137,7 @@ void handleGetValues() {
     json["PO"] = PO;
     json["in_tx"] = in_tx;
     json["FreqA"] = FreqA;  // Voeg FreqA toe aan het JSON-object
+    json["FreqB"] = FreqB;  // Voeg FreqB toe aan het JSON-object
 
     String jsonOutput;
     serializeJson(json, jsonOutput);
@@ -153,29 +154,27 @@ void handleMeterPage() {
     // Algemene pagina opmaak (Dark Mode)
     html += "body { background-color: #1e1e1e; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }";
 
+    // Display layout voor VFO-A en VFO-B (bovenaan)
+    html += ".vfo-display { display: flex; justify-content: center; padding: 20px; background-color: #111; }";
+    html += ".vfo-display .vfo { margin: 0 20px; text-align: center; padding: 15px; background-color: #333; border-radius: 12px; width: 800px; }";
+    html += ".vfo-display .vfo h2 { font-size: 16px; margin-bottom: 10px; color: #00ff00; }";  // Groene kleur voor titel
+    html += ".vfo-display .vfo .freq { font-size: 48px; font-weight: bold; color: #FFD700; }";  // Goudkleurige frequentie
+
     // Taakbalk layout
     html += ".navbar { background-color: #333333; padding: 10px; display: flex; justify-content: space-around; align-items: center; }";
     html += ".navbar button { background-color: #007acc; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }";
     html += ".navbar button:hover { background-color: #005f9e; }"; // Hover effect
 
-    // Dashboard layout
-    html += ".dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 40px; }";
+    // Dashboard layout voor de meters
+    html += ".dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 40px; text-align: center; }";
 
-    // Kaartjes (meter-containers) iets kleiner gemaakt
-    html += ".card { background-color: #252526; border-radius: 12px; padding: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative; }";
+    // Kaartjes (meter-containers)
+    html += ".card { background-color: #252526; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); }";
 
-    // Titel van het dashboard
-    html += ".dashboard h1 { grid-column: span 2; font-size: 32px; text-align: center; margin-bottom: 20px; }";  // Iets kleinere titel
-
-    // Frequentie venster (groot en goudkleurig)
-    html += ".freq-display { grid-column: span 2; text-align: center; color: #FFD700; font-size: 40px; font-weight: bold; padding: 20px; background-color: #333; border-radius: 10px; margin-bottom: 20px; }";
-
-    // Meter schaalverdeling IN de balk
-    html += ".scale { font-size: 12px; color: white; position: absolute; top: -20px; width: 100%; display: flex; justify-content: space-between; }";  // Schaal in de balk
-
-    // Meter stijl (kleiner gemaakt)
+    // Meters
     html += ".meter { width: 100%; height: 20px; background-color: #333; border-radius: 15px; position: relative; margin-top: 15px; }";
     html += ".progress { height: 100%; border-radius: 15px; transition: width 0.5s ease; }";
+    html += ".meter, .progress { box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6); }";
 
     // Specifieke meter kleuren
     html += "#swr .progress { background-color: #4caf50; }";     // Groen voor SWR
@@ -186,20 +185,16 @@ void handleMeterPage() {
     html += "#smm .progress { background-color: #8bc34a; }";     // Groene kleur voor S meter
     html += "#po .progress { background-color: #00bcd4; }";      // Blauw voor PO meter
 
-    // Schaduwen en transities
-    html += ".meter, .progress { box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6); }";
-
-    // Specifieke stijlen voor aangepaste kleuren en markeringen
-    html += ".red { color: red; }";
-    html += ".yellow { color: yellow; }";
-    html += ".circled { border: 2px solid green; border-radius: 50%; padding: 2px; background-color: green; color: red; }";  // Omcirkelde en gevulde tekst
+    // Schaalverdeling in meters
+    html += ".scale { font-size: 12px; color: white; position: absolute; top: -20px; width: 100%; display: flex; justify-content: space-between; }";
 
     html += "</style>";
 
     // JavaScript voor AJAX updates
     html += "<script>";
     html += "function updateMeters(data) {";
-    html += "document.getElementById('freq-display').innerText = data.FreqA + ' Hz';";  // Update FreqA
+    html += "document.getElementById('freq-display_A').innerText = data.FreqA + ' Hz';";
+    html += "document.getElementById('freq-display_B').innerText = data.FreqB + ' Hz';";
     html += "document.getElementById('swr-progress').style.width = data.SWR * 100 / 255 + '%';";
     html += "document.getElementById('comp-progress').style.width = data.Comp * 100 / 255 + '%';";
     html += "document.getElementById('idd-progress').style.width = data.IDD * 100 / 255 + '%';";
@@ -211,54 +206,58 @@ void handleMeterPage() {
     html += "function fetchData() {";
     html += "fetch('/values').then(response => response.json()).then(data => updateMeters(data));";
     html += "}";
-    html += "setInterval(fetchData, 10);";  // Update elke 10ms
+    html += "setInterval(fetchData, 10);";  // FAST
     html += "</script></head><body>";
 
     // Taakbalk container met knoppen
     html += "<div class='navbar'>";
-    // Knop om WiFi-instellingen te wissen
     html += "<form action='/reset' method='POST' style='display:inline-block;'>";
-    html += "<button type='submit'>Delete your WiFi Settings</button>";
+    html += "<button type='submit'>Delete WiFi Settings</button>";
     html += "</form>";
     html += "</div>";  // Einde van navbar
+    
+    // VFO Displays (bovenaan)
+    html += "<div class='vfo-display'>";
+    html += "<div class='vfo'><h2>VFO-A</h2><div id='freq-display_A' class='freq'>Loading...</div></div>";
+    html += "<div class='vfo'><h2>VFO-B</h2><div id='freq-display_B' class='freq'>Loading...</div></div>";
+    html += "</div>";
 
-    // Dashboard container
+    
+
+    // Dashboard met meters
     html += "<div class='dashboard'>";
 
-    // Frequentievenster
-    html += "<div id='freq-display' class='freq-display'>Loading...</div>";
-
-    // SWR meter met schaal in de balk
+    // SWR meter
     html += "<div class='card'><h3>SWR Meter</h3>";
     html += "<div class='meter' id='swr'><div class='scale'><span>1</span><span>1.5</span><span>2</span><span class='yellow'>3</span><span class='red'>5</span><span class='red'>&#8734;</span></div>";
     html += "<div id='swr-progress' class='progress'></div></div></div>";
 
-    // COMP meter met schaal in de balk
+    // COMP meter
     html += "<div class='card'><h3>COMP Meter</h3>";
     html += "<div class='meter' id='comp'><div class='scale'><span>0</span><span>5</span><span class='yellow'>10</span><span class='yellow'>15</span><span class='red'>20</span></div>";
     html += "<div id='comp-progress' class='progress'></div></div></div>";
 
-    // IDD meter met schaal in de balk
+    // IDD meter
     html += "<div class='card'><h3>IDD Meter</h3>";
     html += "<div class='meter' id='idd'><div class='scale'><span>0</span><span>5</span><span>10</span><span>15</span><span>20</span><span>25</span><span>A</span></div>";
     html += "<div id='idd-progress' class='progress'></div></div></div>";
 
-    // VDD meter met schaal in de balk, 13.8 in rood en volledig omcirkeld en gevuld met groen
+    // VDD meter
     html += "<div class='card'><h3>VDD Meter</h3>";
     html += "<div class='meter' id='vdd'><div class='scale'><span>12</span><span>13</span><span class='circled'>13.8</span><span>V</span></div>";
     html += "<div id='vdd-progress' class='progress'></div></div></div>";
 
-    // ALC meter met schaal in de balk
+    // ALC meter
     html += "<div class='card'><h3>ALC Meter</h3>";
     html += "<div class='meter' id='alc'><div class='scale'><span>0</span><span>70</span><span>100</span></div>";
     html += "<div id='alc-progress' class='progress'></div></div></div>";
 
-    // S Meter (RX) met aangepaste kleuren voor 20, 40 en 60, schaal in de balk
+    // S Meter (RX)
     html += "<div class='card'><h3>S Meter (RX)</h3>";
     html += "<div class='meter' id='smm'><div class='scale'><span>1</span><span>2</span><span>3</span><span>5</span><span>7</span><span>9</span><span class='red'>20</span><span class='red'>40</span><span class='red'>60</span></div>";
     html += "<div id='smm-progress' class='progress'></div></div></div>";
 
-    // PO Meter (TX) met schaal in de balk
+    // PO Meter (TX)
     html += "<div class='card'><h3>PO Meter (TX)</h3>";
     html += "<div class='meter' id='po'><div class='scale'><span>0</span><span>10</span><span>50</span><span>100</span><span>150</span><span>W</span></div>";
     html += "<div id='po-progress' class='progress'></div></div></div>";
@@ -268,12 +267,6 @@ void handleMeterPage() {
     html += "</body></html>";
     server.send(200, "text/html", html);
 }
-
-
-
-
-
-
 
 
 

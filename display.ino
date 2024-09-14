@@ -10,13 +10,12 @@ void screen1text() {
     tft.println("FT-991/a SMART DISPLAY " + MyipAddress);
 
     // print the text- connection status & Power set to
-    tft.setCursor((X - 10), 82);
+    tft.setCursor(12, 11);
     tft.setTextColor(WHITE);
-    tft.println("  Cat status:");
+    tft.println("No Cat:");
     tft.setCursor((X + 115), 82);
     tft.setTextColor(WHITE);
     tft.println("Power set to (W):");
-    tft.drawRect((X - 55), (Y + 5), 319, 190, WHITE);  // Kader rond metergedeelte
     
     // check status & texting display
 
@@ -28,12 +27,12 @@ void show_status() {                            // this routine shows a red or g
 
 
 
-    tft.drawCircle(75 + X, 85, 6, BLACK);         // outline of circle is black
+    //tft.drawCircle(5, 11, 6, BLACK);         // outline of circle is black
     if (constatus == false) {
-        tft.fillCircle(75 + X, 85, 4, RED);         // red led if status is false
+        tft.fillCircle(5,10, 3, RED);         // red led if status is false (75 + X, 85, 4, RED);
     }
     else {
-        tft.fillCircle(75 + X, 85, 4, GREEN);       // green led if status is true
+        tft.fillCircle(5,10, 3, GREEN);       // green led if status is true
     }
 }
 
@@ -59,14 +58,14 @@ void draw_radio_screen() {
 
 void draw_M_S1_meter()
 {
+    tft.drawRoundRect(0, 23, 319, 195, 7, WHITE);  // Omkadering meters
 
     //Draw S meter, the S meter can be substituted by the PO meter
 
-
     tft.fillRect(X, (Y + 171), (X + 200), 21, BLACK);       // background of meter to black
-    tft.drawRect((X - 1), (Y + 170), 257, 23, SILVER);        // draw rectangular around the bar
-    tft.drawRect((X - 45), (Y + 170), 44, 23, SILVER);        // draw rectangular around the text
-    tft.setTextColor(WHITE);                                 // set textcolor to white
+    tft.drawFastVLine(54, 205, 6, SILVER);
+    tft.drawFastHLine(55, 210, 252, SILVER);
+    tft.setTextColor(GREY);                                 // set textcolor to white
     tft.setCursor((X + 4), Y + 175);
     tft.println("1");                                                 // display S = 1 scale text, 1 S point = 14 pixels
     tft.setCursor((X + 4), Y + 185);
@@ -103,37 +102,38 @@ void draw_M_S1_meter()
     tft.println("9");                                                 // display S = 9 scale text white
     tft.setCursor((X + 131), Y + 185);
     tft.println(".");                                                 // display S = dot scale
-    tft.setTextColor(RED);                                    // set textcolor to red
-    tft.setCursor((X + 170), Y + 175);
-    tft.println("20");                                                // display S = 20 scale text red
+    tft.setTextColor(RED);                                            // set textcolor to red
+    tft.setCursor((X + 165), Y + 175);
+    tft.println("+20");                                                // display S = 20 scale text red **************
     tft.setCursor((X + 170), Y + 185);
     tft.println(".");                                                 // display S = dot scale
-    tft.setCursor((X + 207), Y + 175);
-    tft.println("40");                                                // display S = 40 scale text red
+    tft.setCursor((X + 202), Y + 175);
+    tft.println("+40");                                                // display S = 40 scale text red
     tft.setCursor((X + 207), Y + 185);
     tft.println(".");                                                 // display S = dot scale
-    tft.setCursor((X + 240), Y + 175);
-    tft.println("60");                                                // display S = 60 scale text red
+    tft.setCursor((X + 235), Y + 175);
+    tft.println("+60");                                                // display S = 60 scale text red
     tft.setCursor((X + 250), Y + 185);
     tft.println(".");                                                 // display S = dot scale
 }
 void draw_PO_meter() {
 
     //Draw PO meter, the PO meter can be substituted by the S meter
-
+    
     tft.fillRect((X - 44), (Y + 171), (X + 244), 21, BLACK); // background of meter to black
-    tft.drawRect((X - 1), (Y + 170), 257, 23, SILVER);        // draw rectangular around the bar
-    tft.drawRect((X - 45), (Y + 170), 44, 23, SILVER);        // draw rectangular around the text
-    tft.setCursor(Z, (Y + 178));
-    tft.setTextColor(BLUE);                                  // set textcolor to blue
-    tft.println("PO");                                               // print meter text
+    tft.setCursor(28, 195);
+    tft.drawFastVLine(54, 205, 6, SILVER);
+    tft.drawFastHLine(55, 210, 252, SILVER);
+    tft.setTextColor(SILVER);                                  // set textcolor to blue
+    tft.setTextSize(2);
+    tft.println("PO");                 // print the meters text
+    tft.setTextSize(1);                                              // print meter text
     tft.setCursor((X + 4), Y + 175);
     tft.println("0");                                                 // display PO = 0 scale text, power 0W
     tft.setCursor((X + 32), Y + 185);
     tft.println(".");                                                 // display PO = dot scale 5W
     tft.setCursor((X + 51), Y + 175);
     tft.println("10");                                                // display PO = 10 scale text
-
     tft.setCursor((X + 82), Y + 185);
     tft.println(".");                                                 // display PO = dot scale 20W
     tft.setCursor((X + 104), Y + 185);
@@ -180,10 +180,13 @@ void draw_SWR_meter() //Draw SWR meter
     tft.setTextSize(2);
     tft.println("SWR");                 // print the meters text
     tft.setTextSize(1);
-    tft.drawLine(54, 45, 54, 37, SILVER);  // Vertikaal lijntje begin meter uitslag
-    tft.drawLine(55, 45, 300, 45, SILVER); // Horizontale lijn
-    tft.setCursor((X + 2), Y + 11);
-    tft.println("1");                                               // display SWR = 1 scale text white
+    tft.drawLine(55, 45, 170, 45, SILVER);
+    tft.drawLine(150, 45, 230, 45, ORANGE);
+    tft.drawLine(230, 45, 300, 45, RED);
+    tft.drawFastVLine(54, 40, 6, SILVER);
+    tft.setTextColor(WHITE);
+    tft.setCursor(52, Y + 11);
+    tft.println("1 . . .");                                               // display SWR = 1 scale text white
     tft.setCursor((X + 48), Y + 11);
     tft.println("1.5");                                             // display SWR = 1.5 scale text white
     tft.setCursor((X + 90), Y + 11);
@@ -208,23 +211,25 @@ void draw_COMP_meter() {
     tft.println("COMP");                                            // print the meters text
     tft.setTextSize(1);
     tft.drawLine(55, 75, 300, 75, SILVER); // Horizontale Lijn 
+    tft.drawFastVLine(54, 70, 6, SILVER);
     tft.setCursor((X + 2), Y + 41);
     tft.println("0");                                               // display COMP = 0 scale text white
     tft.setCursor((X + 50), Y + 41);
     tft.println("5");                                               // display COMP = 5 scale text white
-    tft.setTextColor(YELLOW);                               // text colour to yellow
+    //tft.setTextColor(YELLOW);                               // text colour to yellow
     tft.setCursor((X + 101), Y + 41);
     tft.println("10");                                              // display COMP = 10 scale text yellow
-    tft.setTextColor(ORANGE);                               // text colour to orange
+    //tft.setTextColor(ORANGE);                               // text colour to orange
     tft.setCursor((X + 152), Y + 41);
     tft.println("15");                                              // display COMP = 15 scale text orange
-    tft.setTextColor(RED);                                  // text colour to red
+    //tft.setTextColor(RED);                                  // text colour to red
     tft.setCursor((X + 203), Y + 41);
     tft.println("20");                                              // display COMP = 20 scale text red
-    tft.setTextColor(WHITE);                                // text colour to white
+    //tft.setTextColor(WHITE);                                // text colour to white
     tft.setCursor((X + 242), Y + 41);
     tft.println("dB");                                              // display dB scale text white
 }
+
 void draw_IDD_meter() {
     //Draw IDD meter
     tft.fillRect((X - 44), (Y + 77), (X + 244), 21, BLACK); // background of meter to black
@@ -234,35 +239,36 @@ void draw_IDD_meter() {
     tft.println("IDD");                                             // print the meters text
     tft.setTextSize(1);
     tft.drawLine(55, 115, 300, 115, SILVER);
+    tft.drawFastVLine(54, 110, 6, SILVER);
     tft.setCursor((X + 2), Y + 81);
     tft.println("0 . . .");                                               // display IDD = 0 scale text, all scale text in white
     tft.setCursor((X + 50), Y + 81);
     tft.println("5 . . .");                                               // display IDD = 5 scale text
     tft.setCursor((X + 101), Y + 81);
-    tft.println("10. . .");                                              // display IDD = 10 scale text
+    tft.println("10");                                              // display IDD = 10 scale text
     tft.setCursor((X + 152), Y + 81);
-    tft.println("15. . .");                                              // display IDD = 15 scale text
+    tft.println("15");                                              // display IDD = 15 scale text
     tft.setCursor((X + 203), Y + 81);
-    tft.println("20. . .");                                              // display IDD = 20 scale text
+    tft.println("20");                                              // display IDD = 20 scale text
     tft.setCursor((X + 235), Y + 81);
     tft.println("25");                                              // display IDD = 25 scale text
     tft.setCursor((X + 248), Y + 81);
     tft.println("A");                                               // display A scale text
 }
 void draw_VDD_meter() {
+    
     //Draw VDD meter
-    tft.fillRect((X - 44), (Y + 107), (X + 244), 21, BLACK); // background of meter to black
     tft.setCursor(Z, (Y + 114));
     tft.setTextSize(2);
-    tft.println("VDD");                                              // print the meters text
-    tft.setTextSize(1);
-    //tft.drawRect((X - 1), (Y + 106), 257, 23, WHITE);        // draw rectangular around the bar
-    //tft.drawRect((X - 45), (Y + 106), 44, 23, WHITE);        // draw rectangular around the text
-    tft.fillRect(X, (Y + 107), 244, 4, GOLD);
+    tft.println("VDD");                                             // print the meters text
+    tft.setTextSize(1);                                              // print the meters text
+    tft.drawRect((X - 1), (Y + 106), 257, 23, BLACK);        // draw rectangular around the bar
+    tft.drawRect((X - 45), (Y + 106), 44, 23, BLACK);        // draw rectangular around the text
+    tft.fillRect(X, (Y + 107), 244, 4, GREEN);
 
     //  tft.fillRect((X + 178), (Y + 107), (X - 25), 12, GREEN,YELLOW);
+
     tft.fillRect((X + 178), (Y + 107), (X - 25), 12, GREEN);// bar indicating allowed tolerance of VDD in greenyellow
-    tft.setTextSize(1);
     tft.setTextColor(RED);                                   // textcolor set to red
     tft.setCursor((X + 180), Y + 109);
     tft.println("13.8");                                             // display VDD = 13.8 scale text in red
@@ -274,15 +280,16 @@ void draw_ALC_meter() {
 
     //Draw ALC meter - ALC meter has different dimensions
     //tft.fillRect((X - 44), (Y + 147), (X + 244), 14, BLACK); // background of meter to black
-    tft.drawLine(55, 180, 300, 180, SILVER);
-    tft.setCursor(Z, (Y + 150));
+    tft.fillRect((X - 44), (Y + 147), (X + 244), 14, BLACK); // background of meter to black
+    tft.drawLine(55, 170, 300, 170, ILI9341_BACKGROUND);
+    tft.drawLine(55, 180, 300, 180, SILVER); // Grey Line
+    tft.drawFastVLine(54, 175, 6, SILVER);
     tft.setTextColor(SILVER);
     tft.setTextSize(2);
-    tft.println("ALC");                                      // print the meters text in white
+    tft.setCursor(Z, (Y + 150));
+    tft.println("ALC");                                      // print the meters text
     tft.setTextSize(1);
-    //tft.drawRect((X - 1), (Y + 146), 257, 16, WHITE);        // draw rectangular around the bar
-    //tft.drawRect((X - 45), (Y + 146), 44, 16, WHITE);        // draw rectangular around the text
-    tft.fillRect(X, (Y + 147), 128, 5, DARKGREY);               // white ALC scale
+    tft.fillRect(X, (Y + 147), 128, 5, GREY);                // white ALC scale
 
     draw_M_S1_meter();                                      // call routine draw_M_S_meter. S meter differs, it can be substituted by the PO meter
 
@@ -294,21 +301,21 @@ void draw_touchbuttons01() {
 
     // touch buttons
     tft.setTextColor(BLACK);
-    tft.drawCircle(290, 229, 10, ILI9341_BACKGROUND);
-    tft.fillCircle(290, 229, 10, ILI9341_BACKGROUND);
-    tft.setCursor(286, 222);
+    tft.drawCircle(290, 230, 10, ILI9341_BACKGROUND);
+    tft.fillCircle(290, 230, 10, ILI9341_BACKGROUND);
+    tft.setCursor(286, 223);
     tft.setTextSize(2);
     tft.println("T");
 
-    tft.drawCircle(160, 229, 10, ILI9341_BACKGROUND);
-    tft.fillCircle(160, 229, 10, ILI9341_BACKGROUND);
-    tft.setCursor(156, 222);
+    tft.drawCircle(160, 230, 10, ILI9341_BACKGROUND);
+    tft.fillCircle(160, 230, 10, ILI9341_BACKGROUND);
+    tft.setCursor(156, 223);
     tft.setTextSize(2);
     tft.println("B");
 
-    tft.drawCircle(16, 229, 10, ILI9341_BACKGROUND);
-    tft.fillCircle(16, 229, 10, ILI9341_BACKGROUND);
-    tft.setCursor(12, 222);
+    tft.drawCircle(16, 230, 10, ILI9341_BACKGROUND);
+    tft.fillCircle(16, 230, 10, ILI9341_BACKGROUND);
+    tft.setCursor(12, 223);
     tft.setTextSize(2);
     tft.println("A");
 

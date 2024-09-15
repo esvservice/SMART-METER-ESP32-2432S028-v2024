@@ -138,6 +138,7 @@ void handleGetValues() {
     json["in_tx"] = in_tx;
     json["FreqA"] = FreqA;  // Voeg FreqA toe aan het JSON-object
     json["FreqB"] = FreqB;  // Voeg FreqB toe aan het JSON-object
+    json["pwrsetting"] = pwrsetting; // Voeg pwrsetting toe aan het JSON-object
 
     String jsonOutput;
     serializeJson(json, jsonOutput);
@@ -176,7 +177,7 @@ void handleMeterPage() {
     // Meters layout
     html += ".meters { width: 100%; display: flex; flex-direction: column; gap: 10px; }";
     html += ".meter { background-color: #333; border-radius: 12px; padding: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); position: relative; }";
-    html += ".meter h3 { margin: 0; font-size: 16px; color: #ffffff; }";
+    html += ".meter h3 { margin: 0; font-size: 16px; color: #ffffff; display: inline-block; }";  // Inline voor h3
     html += ".meter-bar { width: 100%; height: 20px; background-color: #252526; border-radius: 15px; margin-top: 10px; position: relative; }";
     html += ".progress { height: 100%; border-radius: 15px; transition: width 0.5s ease; }";
     html += ".scale { font-size: 12px; color: white; position: absolute; top: 0; width: 100%; display: flex; justify-content: space-between; padding: 0 5px; }";
@@ -196,10 +197,14 @@ void handleMeterPage() {
     html += ".scale span.yellow { color: #ffeb3b; }";  // Geel voor specifieke waarden
     html += ".scale span.red { color: #ff0000; }";     // Rood voor specifieke waarden
 
+    // Stijl voor PWR Setting tekst
+    html += ".pwr-setting { display: inline-block; float: right; font-size: 16px; color: #ffffff; transition: color 0.3s ease; }";  // Inline en rechts uitgelijnd
+
     html += "</style>";
 
     // JavaScript voor AJAX updates en knopactivering
     html += "<script>";
+    html += "let previousPwrSetting = null;";
     html += "function formatFrequency(freq) {";
     html += "  if (freq >= 1000000) {";
     html += "    let freqMHz = (freq / 1000000).toFixed(6);";
@@ -258,6 +263,19 @@ void handleMeterPage() {
     html += "  } else {";
     html += "    vfoAHeader.style.color = '#ffffff';";  // Wit als geen van beide waar is
     html += "  }";
+
+    // Update PWR Setting
+    html += "  const pwrSettingElement = document.getElementById('pwr-setting-value');";
+    html += "  const newPwrSetting = data.pwrsetting;";
+    html += "  if (previousPwrSetting === null) {";  // Eerste opstart
+    html += "    document.getElementById('po-progress').style.width = newPwrSetting * 100 / 75 + '%';";  // Initieer PO meter bar
+    html += "  }";
+    html += "  if (previousPwrSetting !== newPwrSetting) {";
+    html += "    pwrSettingElement.innerText = newPwrSetting + ' W';";
+    html += "    pwrSettingElement.style.color = '#00ff00';";  // Groen bij wijziging
+    html += "    setTimeout(() => { pwrSettingElement.style.color = '#ffffff'; }, 1000);";  // Terug naar wit na 1 seconde
+    html += "    previousPwrSetting = newPwrSetting;";
+    html += "  }";
     html += "}";
 
     html += "function fetchData() {";
@@ -301,7 +319,7 @@ void handleMeterPage() {
     html += "</div>";
     html += "<div class='meter' id='alc'><h3>ALC Meter</h3><div class='meter-bar'><div class='scale'><span>0</span><span>70</span><span>100</span></div><div id='alc-progress' class='progress'></div></div></div>";
     html += "<div class='meter' id='smm'><h3>S Meter (RX)</h3><div class='meter-bar'><div class='scale'><span>1</span><span>2</span><span>3</span><span>5</span><span>7</span><span>9</span><span class='red'>+20</span><span class='red'>+40</span><span class='red'>+60</span></div><div id='smm-progress' class='progress'></div></div></div>";
-    html += "<div class='meter' id='po'><h3>PO Meter</h3><div class='meter-bar'><div class='scale'><span>0</span><span>10</span><span>50</span><span>100</span><span>150</span><span>W</span></div><div id='po-progress' class='progress'></div></div></div>";
+    html += "<div class='meter' id='po'><h3>PO Meter</h3><div class='pwr-setting'>PWR Setting: <span id='pwr-setting-value'>Loading...</span></div><div class='meter-bar'><div class='scale'><span>0</span><span>10</span><span>25</span><span>50</span><span>75</span><span>W</span></div><div id='po-progress' class='progress'></div></div></div>";  // Aangepaste schaal
     html += "</div>";
     html += "</div>";  // Einde van paneel voor meters
 
@@ -314,6 +332,12 @@ void handleMeterPage() {
     html += "</body></html>";
     server.send(200, "text/html", html);
 }
+
+
+
+
+
+
 
 
 

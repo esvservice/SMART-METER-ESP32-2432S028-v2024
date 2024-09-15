@@ -34,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArduinoJson-7.1.0", "Libraries\ArduinoJson\7.1.0\ArduinoJson\ArduinoJson-7.1.0.vcxitems", "{E6C84440-51F5-4675-A577-F80CEE760DD6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebSockets-2.6.1", "Libraries\WebSockets\2.6.1\WebSockets\WebSockets-2.6.1.vcxitems", "{55C0D0EE-0B1C-4FA2-9479-A078B3CC9A5C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -79,6 +81,7 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Libraries\WiFi\3.0.4\WiFi\WiFi-3.0.4.vcxitems*{20f4d4a8-e677-474e-ba55-45ac814b3d20}*SharedItemsImports = 9
+		Libraries\WebSockets\2.6.1\WebSockets\WebSockets-2.6.1.vcxitems*{55c0d0ee-0b1c-4fa2-9479-a078b3cc9a5c}*SharedItemsImports = 9
 		Libraries\WiFiManager-master\2.0.17\WiFiManager-master\WiFiManager-master-2.0.17.vcxitems*{5cde58bd-ed82-49ba-9638-e9bed373e393}*SharedItemsImports = 9
 		Libraries\XPT2046_Touchscreen\1.4\XPT2046_Touchscreen\XPT2046_Touchscreen-1.4.vcxitems*{78046aad-39d2-4c48-988b-2735a04eab5a}*SharedItemsImports = 9
 		Libraries\WebServer\3.0.4\WebServer\WebServer-3.0.4.vcxitems*{83642f45-5e8a-4316-99b1-a61e03f6e7dc}*SharedItemsImports = 9
@@ -86,6 +89,7 @@ Global
 		Libraries\ArduinoJson\7.1.0\ArduinoJson\ArduinoJson-7.1.0.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
 		Libraries\LovyanGFX\1.1.16\LovyanGFX\LovyanGFX-1.1.16.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
 		Libraries\WebServer\3.0.4\WebServer\WebServer-3.0.4.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
+		Libraries\WebSockets\2.6.1\WebSockets\WebSockets-2.6.1.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
 		Libraries\WiFiManager-master\2.0.17\WiFiManager-master\WiFiManager-master-2.0.17.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
 		Libraries\WiFi\3.0.4\WiFi\WiFi-3.0.4.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4
 		Libraries\XPT2046_Touchscreen\1.4\XPT2046_Touchscreen\XPT2046_Touchscreen-1.4.vcxitems*{dbe5d8f2-0825-4159-b161-319a2370fc66}*SharedItemsImports = 4

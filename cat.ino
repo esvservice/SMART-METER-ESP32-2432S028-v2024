@@ -214,3 +214,24 @@ void convert_CAT_buffer()                                   // get the wanted da
     CAT_buffer.remove(3, 4);                                  // delete the text 000; from string (string was VVV000;), now VVV
 }
 
+// CAT COMMANDS FOR BAND SELECTION
+// Voeg hier je band_select_* functies in
+void band_select_160m() { Serial.print("BS00;"); get_radio_response(); }
+void band_select_80m() { Serial.print("BS01;"); get_radio_response(); }
+void band_select_60m() { Serial.print("BS02;"); get_radio_response(); }
+void band_select_40m() { Serial.print("BS03;"); get_radio_response(); }
+void band_select_30m() { Serial.print("BS04;"); get_radio_response(); }
+void band_select_20m() { Serial.print("BS05;"); get_radio_response(); }
+void band_select_17m() { Serial.print("BS06;"); get_radio_response(); }
+void band_select_15m() { Serial.print("BS07;"); get_radio_response(); }
+void band_select_12m() { Serial.print("BS08;"); get_radio_response(); }
+void band_select_10m() { Serial.print("BS09;"); get_radio_response(); }
+void band_select_6m() { Serial.print("BS10;"); get_radio_response(); }
+void band_select_GEN(){ Serial.print("BS11;"); get_radio_response(); }
+void band_select_MW() { Serial.print("BS12;"); get_radio_response(); }
+void band_select_00m() { Serial.print("BS13;"); get_radio_response(); }
+void band_select_AIR() { Serial.print("BS14;"); get_radio_response(); }
+void band_select_2m() { Serial.print("BS15;"); get_radio_response(); }
+void band_select_70cm() { Serial.print("BS16;"); get_radio_response(); }
+
+// OTHER CAT COMMANDS

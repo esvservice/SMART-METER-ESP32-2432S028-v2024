@@ -32,6 +32,7 @@
 
 
 
+#include <WebSocketsServer.h>
 #include "WiFi.h"
 #include "WifiManager.h"
 #include "WebServer.h"    // WebServer library for hosting a simple web page on ESP32
@@ -48,7 +49,7 @@
 
 
 WebServer server(80); // Creëer een WebServer object op poort 80
-
+WebSocketsServer webSocket = WebSocketsServer(81); // WebSocket server op poort 81
 
 // Functie voor de terminal (homepage)
 void handleRoot() {
@@ -149,62 +150,64 @@ void handleGetValues() {
 
 // Root HTML-pagina met meters met AJAX om de waarden te verversen
 void handleMeterPage() {
-    String html = "<html><head>";
-    html += "<style>";
+    String html = "<html><head><style>";
 
     // Algemene pagina opmaak (Dark Mode)
     html += "body { background-color: #1e1e1e; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }";
-
-    // Display layout voor VFO-A en VFO-B (bovenaan)
     html += ".vfo-display { display: flex; justify-content: space-around; padding: 20px; background-color: #111; gap: 20px; }";
-    html += ".vfo-display .vfo { flex-grow: 1; position: relative; padding: 15px; background-color: #333; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); }";
-    html += ".vfo-display .vfo h2 { position: absolute; top: 10px; left: 15px; font-size: 16px; margin: 0; transition: color 0.3s ease; }";  // Overgang voor kleur
-    html += ".vfo-display .vfo .freq { display: flex; align-items: center; justify-content: center; width: 100%; height: 100px; font-size: 5vw; font-weight: bold; color: #FFD700; position: relative; }";  // Autosize met 5vw
-    html += ".vfo-display .vfo .freq .small { font-size: 0.5em; vertical-align: sub; }";  // Kleiner font voor laatste twee cijfers
-    html += ".vfo-display .vfo .freq .unit { position: absolute; top: 10px; right: 15px; font-size: 0.5em; }";  // Positioneer Mhz in rechterbovenhoek
-
-    // Knoppen layout
+    html += ".vfo-display .vfo { flex: 1; position: relative; padding: 15px; background-color: #333; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); }";
+    html += ".vfo-display .vfo h2 { position: absolute; top: 10px; left: 15px; font-size: 16px; margin: 0; transition: color 0.3s ease; }";
+    html += ".vfo-display .vfo .freq { display: flex; align-items: center; justify-content: center; width: 100%; height: 100px; font-size: 5vw; font-weight: bold; color: #FFD700; position: relative; }";
+    html += ".vfo-display .vfo .freq .small { font-size: 0.5em; vertical-align: sub; }";
+    html += ".vfo-display .vfo .freq .unit { position: absolute; top: 10px; right: 15px; font-size: 0.5em; }";
     html += ".band-buttons-container { display: flex; justify-content: flex-start; background-color: #222; padding: 10px; }";
     html += ".band-buttons { display: flex; justify-content: space-between; width: 100%; max-width: 100%; }";
-    html += ".band-buttons button { background-color: #333; color: #ffffff; border: 2px solid #555; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-size: 12px; position: relative; }"; // Drukknopstijl
-    html += ".band-buttons button::after { content: ''; position: absolute; top: -5px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; border-radius: 50%; background-color: #555; box-shadow: 0 0 5px #555; }"; // Lampje boven de knop
-    html += ".band-buttons button.active::after { background-color: #00ff00; box-shadow: 0 0 10px #00ff00; }"; // Actieve lampje
-
-    // Paneel layout voor meters en knoppen
-    html += ".panel { background-color: #222; padding: 15px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); margin-top: 20px; width: calc(50% - 20px); }";
+    html += ".band-buttons button { background-color: #333; color: #ffffff; border: 2px solid #555; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-size: 12px; position: relative; }";
+    html += ".band-buttons button::after { content: ''; position: absolute; top: -5px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; border-radius: 50%; background-color: #555; box-shadow: 0 0 5px #555; }";
+    html += ".band-buttons button.active::after { background-color: #00ff00; box-shadow: 0 0 10px #00ff00; }";
+    html += ".panel-container { display: flex; justify-content: space-around; padding: 20px; gap: 20px; }";
+    html += ".panel { flex: 1; background-color: #222; padding: 15px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); }";
     html += ".panel-content { display: flex; flex-direction: column; gap: 10px; }";
-
-    // Meters layout
     html += ".meters { width: 100%; display: flex; flex-direction: column; gap: 10px; }";
     html += ".meter { background-color: #333; border-radius: 12px; padding: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); position: relative; }";
-    html += ".meter h3 { margin: 0; font-size: 16px; color: #ffffff; display: inline-block; }";  // Inline voor h3
+    html += ".meter h3 { margin: 0; font-size: 16px; color: #ffffff; display: inline-block; }";
     html += ".meter-bar { width: 100%; height: 20px; background-color: #252526; border-radius: 15px; margin-top: 10px; position: relative; }";
     html += ".progress { height: 100%; border-radius: 15px; transition: width 0.5s ease; }";
     html += ".scale { font-size: 12px; color: white; position: absolute; top: 0; width: 100%; display: flex; justify-content: space-between; padding: 0 5px; }";
     html += ".meter-row { display: flex; gap: 10px; }";
-    html += ".half-meter { flex: 1; }";  // Zorg ervoor dat VDD en IDD meters elk de helft van de ruimte innemen
-
-    // Specifieke meter kleuren
-    html += "#swr .progress { background-color: #4caf50; }";     // Groen voor SWR
-    html += "#comp .progress { background-color: #ffeb3b; }";    // Geel voor COMP
-    html += "#idd .progress { background-color: #2196f3; }";     // Blauw voor IDD
-    html += "#vdd .progress { background-color: #03a9f4; }";     // Lichter blauw voor VDD
-    html += "#alc .progress { background-color: #ff9800; }";     // Oranje voor ALC
-    html += "#smm .progress { background-color: #8bc34a; }";     // Groene kleur voor S meter
-    html += "#po .progress { background-color: #00bcd4; }";      // Blauw voor PO meter
-
-    // Specifieke kleur voor schaalverdeling
-    html += ".scale span.yellow { color: #ffeb3b; }";  // Geel voor specifieke waarden
-    html += ".scale span.red { color: #ff0000; }";     // Rood voor specifieke waarden
-
-    // Stijl voor PWR Setting tekst
-    html += ".pwr-setting { display: inline-block; float: right; font-size: 16px; color: #ffffff; transition: color 0.3s ease; }";  // Inline en rechts uitgelijnd
-
+    html += ".half-meter { flex: 1; }";
+    html += "#swr .progress { background-color: #4caf50; }";
+    html += "#comp .progress { background-color: #ffeb3b; }";
+    html += "#idd .progress { background-color: #2196f3; }";
+    html += "#vdd .progress { background-color: #03a9f4; }";
+    html += "#alc .progress { background-color: #ff9800; }";
+    html += "#smm .progress { background-color: #8bc34a; }";
+    html += "#po .progress { background-color: #00bcd4; }";
+    html += ".scale span.yellow { color: #ffeb3b; }";
+    html += ".scale span.red { color: #ff0000; }";
+    html += ".pwr-setting { display: inline-block; float: right; font-size: 16px; color: #ffffff; transition: color 0.3s ease; }";
     html += "</style>";
 
-    // JavaScript voor AJAX updates en knopactivering
+    // JavaScript voor AJAX updates en WebSocket communicatie
     html += "<script>";
     html += "let previousPwrSetting = null;";
+    html += "let socket;";
+
+    html += "function initWebSocket() {";
+    html += "  socket = new WebSocket('ws://' + window.location.hostname + ':81/');";
+    html += "  socket.onopen = function() { console.log('WebSocket connection open'); };";
+    html += "  socket.onmessage = function(event) { console.log('Message from server ', event.data); };";
+    html += "  socket.onclose = function() { console.log('WebSocket connection closed'); };";
+    html += "}";
+
+    html += "function sendBandSelectCommand(band) {";
+    html += "  if (socket && socket.readyState === WebSocket.OPEN) {";
+    html += "    socket.send(band);";
+    html += "  } else {";
+    html += "    console.error('WebSocket is not open');";
+    html += "  }";
+    html += "}";
+
     html += "function formatFrequency(freq) {";
     html += "  if (freq >= 1000000) {";
     html += "    let freqMHz = (freq / 1000000).toFixed(6);";
@@ -218,17 +221,17 @@ void handleMeterPage() {
     html += "}";
 
     html += "function updateMeters(data) {";
+    html += "  console.log('Updating meters with data:', data);";
     html += "  document.getElementById('freq-display_A').innerHTML = formatFrequency(data.FreqA);";
     html += "  document.getElementById('freq-display_B').innerHTML = formatFrequency(data.FreqB);";
-    html += "  document.getElementById('swr-progress').style.width = data.SWR * 100 / 255 + '%';";
-    html += "  document.getElementById('comp-progress').style.width = data.Comp * 100 / 255 + '%';";
-    html += "  document.getElementById('idd-progress').style.width = data.IDD * 100 / 255 + '%';";
-    html += "  document.getElementById('vdd-progress').style.width = data.VDD * 100 / 255 + '%';";
-    html += "  document.getElementById('alc-progress').style.width = data.ALC * 100 / 255 + '%';";
-    html += "  if (!data.in_tx) { document.getElementById('smm-progress').style.width = data.SMM * 100 / 255 + '%'; }";
-    html += "  else { document.getElementById('po-progress').style.width = data.PO * 100 / 255 + '%'; }";
+    html += "  document.getElementById('swr-progress').style.width = (data.SWR * 100 / 255) + '%';";
+    html += "  document.getElementById('comp-progress').style.width = (data.Comp * 100 / 255) + '%';";
+    html += "  document.getElementById('idd-progress').style.width = (data.IDD * 100 / 255) + '%';";
+    html += "  document.getElementById('vdd-progress').style.width = (data.VDD * 100 / 255) + '%';";
+    html += "  document.getElementById('alc-progress').style.width = (data.ALC * 100 / 255) + '%';";
+    html += "  if (!data.in_tx) { document.getElementById('smm-progress').style.width = (data.SMM * 100 / 255) + '%'; }";
+    html += "  else { document.getElementById('po-progress').style.width = (data.PO * 100 / 255) + '%'; }";
 
-    // Logica voor knopactivering
     html += "  const bands = {";
     html += "    '160m': [1810000, 2000000],";
     html += "    '80m': [3500000, 3800000],";
@@ -254,61 +257,58 @@ void handleMeterPage() {
     html += "    }";
     html += "  }";
 
-    // Kleur logica voor VFO-A
     html += "  let vfoAHeader = document.querySelector('.vfo-display .vfo h2');";
     html += "  if (data.in_tx) {";
-    html += "    vfoAHeader.style.color = '#ff0000';";  // Rood als in_tx waar is
+    html += "    vfoAHeader.style.color = '#ff0000';";
     html += "  } else if (data.SMM > 0) {";
-    html += "    vfoAHeader.style.color = '#00ff00';";  // Groen als er signaal op de S-meter is
+    html += "    vfoAHeader.style.color = '#00ff00';";
     html += "  } else {";
-    html += "    vfoAHeader.style.color = '#ffffff';";  // Wit als geen van beide waar is
+    html += "    vfoAHeader.style.color = '#ffffff';";
     html += "  }";
 
-    // Update PWR Setting
     html += "  const pwrSettingElement = document.getElementById('pwr-setting-value');";
     html += "  const newPwrSetting = data.pwrsetting;";
-    html += "  if (previousPwrSetting === null) {";  // Eerste opstart
-    html += "    document.getElementById('po-progress').style.width = newPwrSetting * 100 / 75 + '%';";  // Initieer PO meter bar
+    html += "  if (previousPwrSetting === null) {";
+    html += "    document.getElementById('po-progress').style.width = (newPwrSetting * 100 / 75) + '%';";
     html += "  }";
     html += "  if (previousPwrSetting !== newPwrSetting) {";
     html += "    pwrSettingElement.innerText = newPwrSetting + ' W';";
-    html += "    pwrSettingElement.style.color = '#00ff00';";  // Groen bij wijziging
-    html += "    setTimeout(() => { pwrSettingElement.style.color = '#ffffff'; }, 1000);";  // Terug naar wit na 1 seconde
+    html += "    pwrSettingElement.style.color = '#00ff00';";
+    html += "    setTimeout(() => { pwrSettingElement.style.color = '#ffffff'; }, 1000);";
     html += "    previousPwrSetting = newPwrSetting;";
     html += "  }";
     html += "}";
 
     html += "function fetchData() {";
-    html += "fetch('/values').then(response => response.json()).then(data => updateMeters(data));";
+    html += "  fetch('/values').then(response => response.json()).then(data => updateMeters(data)).catch(error => console.error('Error fetching data:', error));";
     html += "}";
-    html += "setInterval(fetchData, 10);";  // FAST
+
+    html += "window.onload = function() {";
+    html += "  initWebSocket();";
+    html += "  setInterval(fetchData, 10);"; // Haal elke 10 milliseconde data op
+    html += "};";
     html += "</script></head><body>";
 
-    // Taakbalk container met knoppen
-    html += "<div class='navbar'>";
-    html += "<form action='/reset' method='POST' style='display:inline-block;'>";
-    html += "<button type='submit'>Delete WiFi Settings</button>";
-    html += "</form>";
-    html += "</div>";  // Einde van navbar
-
-    // Band knoppen
+    // HTML voor de band knoppen
     html += "<div class='band-buttons-container'>";
     html += "<div class='band-buttons'>";
     String bands[] = { "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m", "2m", "70cm" };
     for (String band : bands) {
-        html += "<button id='button-" + band + "'>" + band + "</button>";
+        html += "<button id='button-" + band + "' onclick=\"sendBandSelectCommand('" + band + "')\">" + band + "</button>";
     }
     html += "</div>";
-    html += "</div>";  // Einde van band-buttons-container
+    html += "</div>";
 
-    // VFO Displays (bovenaan)
+    // VFO Displays
     html += "<div class='vfo-display'>";
     html += "<div class='vfo'><h2>VFO-A</h2><div id='freq-display_A' class='freq'>Loading...</div></div>";
     html += "<div class='vfo'><h2>VFO-B</h2><div id='freq-display_B' class='freq'>Loading...</div></div>";
     html += "</div>";
 
-    // Voorpaneel voor meters
-    html += "<div class='vfo-display'>";
+    // Voorpaneel voor meters en knoppen
+    html += "<div class='panel-container'>";
+
+    // Linker paneel voor meters
     html += "<div class='panel'>";
     html += "<div class='panel-content meters'>";
     html += "<div class='meter' id='swr'><h3>SWR Meter</h3><div class='meter-bar'><div class='scale'><span>1</span><span>1.5</span><span>2</span><span class='yellow'>3</span><span class='red'>5</span><span class='red'>&#8734;</span></div><div id='swr-progress' class='progress'></div></div></div>";
@@ -319,33 +319,25 @@ void handleMeterPage() {
     html += "</div>";
     html += "<div class='meter' id='alc'><h3>ALC Meter</h3><div class='meter-bar'><div class='scale'><span>0</span><span>70</span><span>100</span></div><div id='alc-progress' class='progress'></div></div></div>";
     html += "<div class='meter' id='smm'><h3>S Meter (RX)</h3><div class='meter-bar'><div class='scale'><span>1</span><span>2</span><span>3</span><span>5</span><span>7</span><span>9</span><span class='red'>+20</span><span class='red'>+40</span><span class='red'>+60</span></div><div id='smm-progress' class='progress'></div></div></div>";
-    html += "<div class='meter' id='po'><h3>PO Meter</h3><div class='pwr-setting'>PWR Setting: <span id='pwr-setting-value'>Loading...</span></div><div class='meter-bar'><div class='scale'><span>0</span><span>10</span><span>25</span><span>50</span><span>75</span><span>W</span></div><div id='po-progress' class='progress'></div></div></div>";  // Aangepaste schaal
+    html += "<div class='meter' id='po'><h3>PO Meter</h3><div class='pwr-setting'>PWR Setting: <span id='pwr-setting-value'>Loading...</span></div><div class='meter-bar'><div class='scale'><span>0</span><span>10</span><span>25</span><span>50</span><span>75</span><span>W</span></div><div id='po-progress' class='progress'></div></div></div>";
     html += "</div>";
-    html += "</div>";  // Einde van paneel voor meters
+    html += "</div>";  // Einde van linker paneel voor meters
 
-    // Voorpaneel voor knoppen
+    // Rechter paneel voor andere knoppen
     html += "<div class='panel'>";
-    // Hier kunnen andere knoppen of inhoud worden toegevoegd in de toekomst
-    html += "</div>";  // Einde van paneel voor knoppen
-    html += "</div>";  // Einde van vfo-display voor panelen
+    html += "<div class='panel-content'>";
+    html += "<h3>Control Buttons</h3>";
+    html += "<button>Button 1</button>";
+    html += "<button>Button 2</button>";
+    html += "<button>Button 3</button>";
+    html += "</div>";
+    html += "</div>";  // Einde van rechter paneel voor knoppen
+
+    html += "</div>";  // Einde van panel-container
 
     html += "</body></html>";
     server.send(200, "text/html", html);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -369,9 +361,57 @@ void loop() {
     //debug(); //to setup touch
 
 
-    server.handleClient();  // Webserver aan de gang houden om aanvragen te verwerken
+    server.handleClient(); // Afhandelen van inkomende HTTP-verzoeken
+    webSocket.loop(); // Beheer van WebSocket-verzoeken en -verbindingen
 
 
 
 
+}
+
+
+void webSocketEvent(uint8_t num, WStype_t type, uint8_t* payload, size_t length) {
+    if (type == WStype_TEXT) {
+        String command = String((char*)payload);
+
+        if (command == "160m") {
+            band_select_160m();
+        }
+        else if (command == "80m") {
+            band_select_80m();
+        }
+        else if (command == "60m") {
+            band_select_60m();
+        }
+        else if (command == "40m") {
+            band_select_40m();
+        }
+        else if (command == "30m") {
+            band_select_30m();
+        }
+        else if (command == "20m") {
+            band_select_20m();
+        }
+        else if (command == "17m") {
+            band_select_17m();
+        }
+        else if (command == "15m") {
+            band_select_15m();
+        }
+        else if (command == "12m") {
+            band_select_12m();
+        }
+        else if (command == "10m") {
+            band_select_10m();
+        }
+        else if (command == "6m") {
+            band_select_6m();
+        }
+        else if (command == "2m") {
+            band_select_2m();
+        }
+        else if (command == "70cm") {
+            band_select_70cm();
+        }
+    }
 }

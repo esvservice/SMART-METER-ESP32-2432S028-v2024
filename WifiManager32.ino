@@ -35,11 +35,16 @@ static void wifisetup32() {
         MyipAddress = WiFi.localIP().toString();
         screen1text(); // refresh screen
 
-        // Start de webserver
-        //server.on("/", handleRoot); // Deze functie wordt uitgevoerd bij toegang tot de root van het IP-adres
-        server.on("/", handleMeterPage);    // Webpagina met meters
-        server.begin(); // Start de webserver
-        Serial.println("Webserver gestart.");
+        // Start de HTTP-server op poort 80
+        server.on("/", handleMeterPage);
+        server.begin();
+        Serial.println("Webserver gestart. poort 80");
+
+        // Start de WebSocket-server op poort 81
+        webSocket.begin();
+        webSocket.onEvent(webSocketEvent);
+        Serial.println("WebSocketserver gestart. poort 81");
+        
     }
     
     
@@ -53,8 +58,9 @@ static void wifisetup32() {
     // Stel de reset route in voor WiFi-instellingen
     server.on("/reset", HTTP_POST, handleReset);
 
-    // Start de webserver
+    // Start de webserver & socketserver
     server.begin();
+    webSocket.begin();
 
 
 

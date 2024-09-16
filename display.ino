@@ -15,14 +15,14 @@ void screen1text() {
     tft.println("No Cat:");
     tft.setCursor((X + 115), 82);
     tft.setTextColor(WHITE);
-    tft.println("Power set to (W):");
-    
+    tft.println("       PWR set to:");
+    tft.setCursor((X + 239), 82);//82
+    tft.println("W");
+
+
     // check status & texting display
 
-
 }
-
-
 //SHOW SERIAL STATUS ON DISPLAY
 void show_status() {                            // this routine shows a red or green connection statusled on the display
 
@@ -30,10 +30,10 @@ void show_status() {                            // this routine shows a red or g
 
     //tft.drawCircle(5, 11, 6, BLACK);         // outline of circle is black
     if (constatus == false) {
-        tft.fillCircle(5,11, 3, RED);         // red led if status is false (75 + X, 85, 4, RED);
+        tft.fillCircle(5, 11, 3, RED);         // red led if status is false (75 + X, 85, 4, RED);
     }
     else {
-        tft.fillCircle(5,11, 3, GREEN);       // green led if status is true
+        tft.fillCircle(5, 11, 3, GREEN);       // green led if status is true
     }
 }
 
@@ -60,18 +60,21 @@ void draw_radio_screen() {
 void draw_M_S1_meter()
 {
     tft.drawRoundRect(0, 23, 319, 196, 7, TFT_GOLD);  // Omkadering meters
-    tft.drawRoundRect(90, 1, 146, 23, 3, GOLD);
-    
+    tft.fillRoundRect(311, 19, 8, 10, 1, TFT_BLACK);
+    tft.drawFastVLine(318, 18, 10, TFT_GOLD);
+    tft.drawRoundRect(90, 1, 229, 23, 2, TFT_GOLD);
+    tft.drawFastHLine(91, 23, 227, TFT_BLACK);
+
     //Draw S meter, the S meter can be substituted by the PO meter
 
-    
+
     tft.fillRect((X - 44), (Y + 175), 42, 20, BLACK);           // clear the text area
     tft.setCursor(Z, (Y + 178));
-    tft.setTextColor(SILVER);                      // set textcolor
+    tft.setTextColor(SILVER);                                   // set textcolor
     tft.setTextSize(2);
     tft.println("  S");                            // display text of receiver meter bar
     tft.setTextSize(1);                                             // display text of receiver meter bar
-    
+
     tft.fillRect(X, (Y + 173), (X + 200), 21, BLACK);       // background of meter to black
     tft.drawFastVLine(54, 204, 7, SILVER);
     tft.drawFastHLine(55, 204, 135, SILVER);
@@ -130,7 +133,7 @@ void draw_M_S1_meter()
 void draw_PO_meter() {
 
     //Draw PO meter, the PO meter can be substituted by the S meter
-    
+
     tft.fillRect((X - 44), (Y + 173), (X + 244), 21, BLACK); // background of meter to black
     tft.setCursor(28, 195);
     tft.drawFastVLine(54, 204, 6, SILVER);
@@ -268,7 +271,7 @@ void draw_IDD_meter() {
     tft.println("A");                                             // display A scale text
 }
 void draw_VDD_meter() {
-    
+
     //Draw VDD meter
     tft.setCursor(Z, (Y + 114));
     tft.setTextSize(2);
@@ -276,9 +279,8 @@ void draw_VDD_meter() {
     tft.setTextSize(1);                                              // print the meters text
     tft.drawRect((X - 1), (Y + 106), 257, 23, BLACK);        // draw rectangular around the bar
     tft.drawRect((X - 45), (Y + 106), 44, 23, BLACK);        // draw rectangular around the text
-    tft.fillRect(X, (Y + 116), 244, 3, GREEN);
-    tft.drawLine(54, 139, 305, 139, SILVER);
-    tft.drawFastVLine(54, 140, 6, SILVER);
+    tft.fillRect(X, (Y + 116), 244, 3, TFT_GREEN);
+    tft.drawLine(55, 137, 298, 137, TFT_GREEN);
 
     tft.fillRect((X + 178), (Y + 107), (X - 25), 12, GREEN); // bar indicating allowed tolerance of VDD in greenyellow
     tft.setTextColor(BLACK);                                   // textcolor set to RED
@@ -286,22 +288,20 @@ void draw_VDD_meter() {
     tft.println("13.8");                                             // display VDD = 13.8 scale text in red
     tft.setTextColor(WHITE);                                 // make text  = V white
     tft.setCursor((X + 248), Y + 109);
-    tft.println("V");                                         // display V scale text
+    tft.println("V");                                            // display V scale text
 }
 void draw_ALC_meter() {
 
     //Draw ALC meter - ALC meter has different dimensions
     tft.fillRect((X - 44), (Y + 147), (X + 244), 14, BLACK);   // background of meter to black
-    tft.drawLine(55, 170, 305, 170, TFT_NAVY);
-    tft.drawLine(183, 170, 305, 170, TFT_RED);
-    tft.drawLine(54, 174, 305, 174, SILVER);                  // Onderlijn meter
-    tft.drawFastVLine(54, 175, 6, SILVER);
+    tft.drawLine(55, 174, 305, 174, TFT_NAVY);
+    tft.drawLine(183, 174, 305, 174, TFT_RED);
     tft.setTextColor(SILVER);
     tft.setTextSize(2);
-    tft.setCursor(Z, (Y + 150));
+    tft.setCursor(Z, (Y + 148));
     tft.println("ALC");                                      // print the meters text
     tft.setTextSize(1);
-    tft.fillRect(X, (Y + 147), 128, 5, TFT_NAVY);                // white ALC scale
+    tft.fillRect(X, (Y + 149), 128, 7, TFT_NAVY);                // white ALC scale
 
     draw_M_S1_meter();                                      // call routine draw_M_S_meter. S meter differs, it can be substituted by the PO meter
 
@@ -410,9 +410,9 @@ void Display()
     // Fill the VDD bar
     if (VDD != pVDD) {                                                      // if new VDD is same as previous value, do nothing, no need to draw graphics if they did not change
         if (VDD < pVDD) {
-            tft.fillRect((X + VDD), (Y + 122), (255 - VDD), H, BLACK);  // if new value < previous value, clear the bar partly. not whole bar but from value to 255, reduces flicker
+            tft.fillRect((X + VDD), (Y + 121), (255 - VDD), H, BLACK);  // if new value < previous value, clear the bar partly. not whole bar but from value to 255, reduces flicker
         }                                                                     // if new value is higher than previous value, just add to the bar
-        tft.fillRect(X, (Y + 122), VDD, H, ILI9341_BACKGROUND);                     // VDD, startpoint,row,value,height of bar
+        tft.fillRect(X, (Y + 121), VDD, H, TFT_SKYBLUE);                     // VDD, startpoint,row,value,height of bar
         pVDD = VDD;                                                           // store measured VDD value as previous value
     }
 

@@ -62,6 +62,7 @@ void draw_M_S1_meter()
     tft.drawRoundRect(90, 1, 146, 23, 3, GOLD);
     
     //Draw S meter, the S meter can be substituted by the PO meter
+
     
     tft.fillRect((X - 44), (Y + 175), 42, 20, BLACK);           // clear the text area
     tft.setCursor(Z, (Y + 178));

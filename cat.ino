@@ -36,12 +36,13 @@ void cat()
         convert_CAT_buffer();                                           // CAT_buffer holds received string in format: RMNVVV000; N=meternumber, VVV is wanted value
         SMM = CAT_buffer.toInt();                                       // store string as int in SSM to be displayed as S meter bar
         if (main_flag1 == false) {                                      // clear area and write the text S, but only once to reduce flicker
+            
             //tft.fillRect((X - 44), (Y + 175), 42, 20, BLACK);           // clear the text area
             //tft.setCursor(Z, (Y + 178));
-            //tft.setTextColor(SILVER);                      // set textcolor
+            //tft.setTextColor(SILVER);                                   // set textcolor
             //tft.setTextSize(2);
-            //tft.println("  S");                            // display text of receiver meter bar
-            //tft.setTextSize(1);                                             // display text of receiver meter bar
+            //tft.println("  S");                                         // display text of receiver meter bar
+            //tft.setTextSize(1);                                         // display text of receiver meter bar
         }
         main_flag1 = true;                                              // flag so that text and clear is only written once, toggle function
         main_flag2 = true;                                              // flag so that text and clear is only written once, toggle function

@@ -22,6 +22,7 @@ void screen1text() {
 
 }
 
+
 //SHOW SERIAL STATUS ON DISPLAY
 void show_status() {                            // this routine shows a red or green connection statusled on the display
 

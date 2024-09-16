@@ -193,6 +193,7 @@ String getCSS() {
         ".scale span.yellow { color: #ffeb3b; }"
         ".scale span.red { color: #ff0000; }"
         ".pwr-setting { display: inline-block; float: right; font-size: 16px; color: #ffffff; transition: color 0.3s ease; }"
+        ".panel-content button { background-color: #333; color: #ffffff; border: 2px solid #555; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-size: 12px; position: relative; }"
         "</style>";
 }
 
@@ -371,14 +372,14 @@ String getMeters() {
         "<span data-value='10'>10</span>"
         "<span data-value='50'>50</span>"
         "<span data-value='100'>100</span>"
-        "<span data-value='150'>150</span>"
+        "<span data-value='150'>W</span>"
         "</div><div id='po-progress' class='progress'></div></div></div>"
         "</div>";
 }
 
 String getControlButtons() {
     return "<div class='panel-content'>"
-        "<h3>Control Buttons</h3>"
+        "<h3>Control Buttons - Under Construction - </h3>"
         "<button>Button 1</button>"
         "<button>Button 2</button>"
         "<button>Button 3</button>"

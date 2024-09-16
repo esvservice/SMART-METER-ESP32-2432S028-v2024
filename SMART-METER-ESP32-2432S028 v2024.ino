@@ -248,7 +248,7 @@ String getScript() {
 
         // Pas de PO waarde aan van 0-150 naar 0-255 en zet de breedte van de progressbar
         "  let mappedPO = (data.PO / 150) * 255;"  // PO waarde omzetten naar 255 schaal
-        "  poProgressBar.style.width = (mappedPO / 255) * 100 + '%';"  // Zet de breedte van de progressbar
+        "  poProgressBar.style.width = (mappedPO / 255) * 37.3 + '%';"  // Zet de breedte van de progressbar
 
         "  const pwrSettingElement = document.getElementById('pwr-setting-value');"
         "  const newPwrSetting = data.pwrsetting;"
@@ -350,6 +350,7 @@ String getMeters() {
         "  <div class='meter half-meter' id='idd'><h3>IDD Meter</h3><div class='meter-bar'><div class='scale'><span>0</span><span>5</span><span>10</span><span>15</span><span>20</span><span>25</span><span>A</span></div><div id='idd-progress' class='progress'></div></div></div>"
         "</div>"
         "<div class='meter' id='alc'><h3>ALC Meter</h3><div class='meter-bar'><div class='scale'><span>0</span><span>70</span><span>100</span></div><div id='alc-progress' class='progress'></div></div></div>"
+        // S METER SCHAAL
         "<div class='meter' id='smm'><h3>S Meter (RX)</h3><div class='meter-bar'><div class='scale'>"
         "<span data-value='0'>1</span>"
         "<span data-value='14'>2</span>"
@@ -367,12 +368,25 @@ String getMeters() {
         "<span data-value='231' class='red'>+50</span>"
         "<span data-value='255' class='red'>+60</span>"
         "</div><div id='smm-progress' class='progress'></div></div></div>"
+        // po METER SCHAAL
         "<div class='meter' id='po'><h3>PO Meter</h3><div class='pwr-setting'>PWR Setting: <span id='pwr-setting-value'>Loading...</span></div><div class='meter-bar'><div class='scale'>"
         "<span data-value='0'>0</span>"
-        "<span data-value='10'>10</span>"
-        "<span data-value='50'>50</span>"
-        "<span data-value='100'>100</span>"
-        "<span data-value='150'>W</span>"
+        "<span data-value='25'>5</span>"
+        "<span data-value='44'>10</span>"
+        "<span data-value='20'>20</span>"
+        "<span data-value='103'>30</span>"
+        "<span data-value='125'>40</span>"
+        "<span data-value='147'>50</span>"
+        "<span data-value='158'>60</span>"
+        "<span data-value='169'>70</span>"
+        "<span data-value='179'>80</span>"
+        "<span data-value='190'>90</span>"
+        "<span data-value='201'>100</span>"
+        "<span data-value='212'>110</span>"
+        "<span data-value='223'>120</span>"
+        "<span data-value='233'>130</span>"
+        "<span data-value='244'>140</span>"
+        "<span data-value='255'>W</span>"
         "</div><div id='po-progress' class='progress'></div></div></div>"
         "</div>";
 }

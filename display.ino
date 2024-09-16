@@ -435,22 +435,28 @@ void Display()
 
 
     // Fill the S Meter bar
-    if (in_tx == false) {                                                      // if we are in RX
-        if (SMM != pSMM) {                                                     // if new S meter value is same as previous value, do nothing, no need to draw graphics if they did not change
-            if (SMM < pSMM) {
-                tft.fillRect((X + SMM), (Y + 187), (255 - SMM), H, BLACK);    // if new value < previous value, clear the bar partly. not whole bar but from value to 255, reduces flicker
-            }                                                                       // if new value is higher than previous value, just add to the bar
-            tft.fillRect(X, (Y + 187), SMM, H, TFT_GREENYELLOW);
-        }
 
-        pSMM = SMM;                                                             // store measured S meter value as previous value
+    if (SMM != pSMM) {                                                       // if new SMM is same as previous value, do nothing, no need to draw graphics if they did not change
+        if (SMM < pSMM) {
+            tft.fillRect((X + SMM), (Y + 187), (255 - SMM), H, BLACK);       // if new value < previous value, clear the bar partly. not whole bar but from value to 255, reduces flicker
+        }                                                                    // if new value is higher than previous value, just add to the bar
+        if (SMM <= 135) {
+            tft.fillRect(X, (Y + 187), SMM, H, TFT_SILVER);                  // when SMM is equal or less than 135, make bar green
+        }
+        if (SMM > 135) {                                                     // when SMM between 135 and 255, make first part of bar green and second part red
+            tft.fillRect(X, (Y + 187), 135, H, TFT_SILVER);
+            tft.fillRect((135 + X), (Y + 187), (SMM - 135), H, TFT_RED);
+        }
+        pSMM = SMM;                                                          // store measured SMM value as previous value
     }
+    // Fill the PO Meter bar    
     else {
         if (PO < pPO) {
-            tft.fillRect((X + PO), (Y + 187), (255 - PO), H, BLACK);        // if new value < previous value, clear the bar partly. not whole bar but from value to 255, reduces flicker
-        }                                                                         // if new value is higher than previous value, just add to the bar
-        tft.fillRect(X, (Y + 187), PO, H, BLUE);                          // PO, startpoint,row,value,height of bar
-        pPO = PO;                                                                 // store measured PO value as previous value
+            tft.fillRect((X + PO), (Y + 187), (255 - PO), H, BLACK);         // if new value < previous value, clear the bar partly. not whole bar but from value to 255, reduces flicker
+        }                                                                    // if new value is higher than previous value, just add to the bar
+        tft.fillRect(X, (Y + 187), PO, H, BLUE);                             // PO, startpoint,row,value,height of bar
+
+        pPO = PO;                                                            // store measured PO value as previous value
     }
 
 }

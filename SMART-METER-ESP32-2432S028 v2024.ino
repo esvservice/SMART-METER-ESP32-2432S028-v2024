@@ -315,8 +315,6 @@ String getScript() {
         "</script>";
 }
 
-
-
 String getBandButtons() {
     String html = "<div class='band-buttons-container'><div class='band-buttons'>";
     String bands[] = { "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m", "2m", "70cm" };

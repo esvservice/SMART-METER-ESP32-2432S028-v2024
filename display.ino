@@ -10,9 +10,9 @@ void screen1text() {
     tft.println("FT-991/a SMART DISPLAY " + MyipAddress);
 
     // print the text- connection status & Power set to
-    tft.setCursor(12, 11);
-    tft.setTextColor(WHITE);
-    tft.println("No Cat:");
+    //tft.setCursor(12, 11);
+    //tft.setTextColor(WHITE);
+    //tft.println("No Cat:");
     tft.setCursor((X + 115), 82);
     tft.setTextColor(WHITE);
     tft.println("       PWR set to:");
@@ -30,10 +30,10 @@ void show_status() {                            // this routine shows a red or g
 
     //tft.drawCircle(5, 11, 6, BLACK);         // outline of circle is black
     if (constatus == false) {
-        tft.fillCircle(5, 11, 3, RED);         // red led if status is false (75 + X, 85, 4, RED);
+        tft.fillCircle(5, 9, 3, RED);         // red led if status is false (75 + X, 85, 4, RED);
     }
     else {
-        tft.fillCircle(5, 11, 3, GREEN);       // green led if status is true
+        tft.fillCircle(5, 9, 3, GREEN);       // green led if status is true
     }
 }
 

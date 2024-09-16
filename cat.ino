@@ -153,8 +153,8 @@ void cat()
     if (prevfreqA != FreqA)                                 // if setting has changed since last read
     {
         tft.setTextColor(WHITE);
-        tft.fillRect((X - 44), -10, (60), 30, BLACK); // clear previous display
-        tft.setCursor((X - 44), (Y - 10));
+        tft.fillRect((X - 40), -12, (60), 30, BLACK); // clear previous display
+        tft.setCursor((X - 40), (Y - 12));
         tft.setTextSize(1);
         tft.println(FreqA);                                         // display freqA, it has changed
     }

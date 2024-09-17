@@ -161,17 +161,24 @@ void handleMeterPage() {
 String getCSS() {
     return "<style>"
         "body { background-color: #1e1e1e; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }"
-        ".vfo-display { display: flex; justify-content: space-around; padding: 20px; background-color: #111; gap: 20px; }"
-        ".vfo-display .vfo { flex: 1; position: relative; padding: 15px; background-color: #333; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); }"
-        ".vfo-display .vfo h2 { position: absolute; top: 10px; left: 15px; font-size: 16px; margin: 0; transition: color 0.3s ease; }"
-        ".vfo-display .vfo .freq { display: flex; align-items: center; justify-content: center; width: 100%; height: 100px; font-size: 5vw; font-weight: bold; color: #FFD700; position: relative; }"
-        ".vfo-display .vfo .freq .small { font-size: 0.5em; vertical-align: sub; }"
-        ".vfo-display .vfo .freq .unit { position: absolute; top: 10px; right: 15px; font-size: 0.5em; }"
-        ".band-buttons-container { display: flex; justify-content: flex-start; background-color: #222; padding: 10px; }"
-        ".band-buttons { display: flex; justify-content: space-between; width: 100%; max-width: 100%; }"
-        ".band-buttons button { background-color: #333; color: #ffffff; border: 2px solid #555; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-size: 12px; position: relative; }"
-        ".band-buttons button::after { content: ''; position: absolute; top: -5px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; border-radius: 50%; background-color: #555; box-shadow: 0 0 5px #555; }"
-        ".band-buttons button.active::after { background-color: #00ff00; box-shadow: 0 0 10px #00ff00; }"
+        ".vfo-display { display: flex; justify-content: space-around; padding: 20px; background-color: #1e1e1e; gap: 20px; }"
+        ".vfo { flex: 1; position: relative; padding: 15px; background-color: #333; border-radius: 12px; box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.7), 0 4px 8px rgba(0, 0, 0, 0.5); min-width: 250px; }"
+        ".freq { position: relative; display: flex; align-items: center; justify-content: center; height: 100px; font-size: 4vw; font-weight: bold; color: #FFD700; background-color: #222; border-radius: 10px; box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.7); }"
+        ".freq::before { content: attr(data-label); position: absolute; top: 10px; left: 10px; font-size: 14px; color: #FFD700; }"
+        ".freq .small { font-size: 0.5em; vertical-align: sub; }"
+        ".freq .unit { font-size: 0.5em; margin-left: 10px; }"
+        ".vfo-controls { position: absolute; top: 10px; right: 10px; display: flex; align-items: center; gap: 5px; }"
+        ".button-container { display: flex; gap: 5px; }"
+        ".freq-btn { background-color: #333; color: #FFD700; border: 2px solid #555; border-radius: 50%; padding: 5px; cursor: pointer; font-size: 14px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.7); transition: background-color 0.2s, box-shadow 0.2s; }"
+        ".freq-btn:hover { background-color: #444; box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 6px 12px rgba(0, 0, 0, 0.9); }"
+        ".step-select { background-color: #333; color: #FFD700; border: 2px solid #555; border-radius: 50%; padding: 5px; font-size: 12px; width: 70px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.7); transition: background-color 0.2s, box-shadow 0.2s; appearance: none; cursor: pointer; }"
+        ".step-select:focus { outline: none; border-color: #00ff00; }"
+        ".band-buttons-container { display: flex; justify-content: center; background-color: #1e1e1e; padding: 10px; margin-top: 5px; }"
+        ".band-buttons { display: flex; justify-content: space-between; width: 100%; max-width: 800px; gap: 10px; }"
+        ".band-btn { background-color: #333; color: #FFD700; border: 2px solid #555; border-radius: 5px; cursor: pointer; font-size: 1vw; width: 80px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.7); transition: background-color 0.2s, box-shadow 0.2s; position: relative; }"
+        ".band-btn:hover { background-color: #444; box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 6px 12px rgba(0, 0, 0, 0.9); }"
+        ".band-btn::before { content: ''; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; border-radius: 50%; background-color: #555; box-shadow: 0 0 5px #555; }"
+        ".band-btn.active::before { background-color: #00ff00; box-shadow: 0 0 10px #00ff00; }"
         ".panel-container { display: flex; justify-content: space-around; padding: 20px; gap: 20px; }"
         ".panel { flex: 1; background-color: #222; padding: 15px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); }"
         ".panel-content { display: flex; flex-direction: column; gap: 10px; }"
@@ -194,8 +201,14 @@ String getCSS() {
         ".scale span.red { color: #ff0000; }"
         ".pwr-setting { display: inline-block; float: right; font-size: 16px; color: #ffffff; transition: color 0.3s ease; }"
         ".panel-content button { background-color: #333; color: #ffffff; border: 2px solid #555; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-size: 12px; position: relative; }"
+        "@media (max-width: 600px) {"
+        "  .freq-btn { width: 24px; height: 24px; font-size: 12px; }"
+        "  .band-btn { width: 70px; height: 35px; font-size: 2.5vw; }"
+        "  .step-select { width: 60px; font-size: 9px; }"
+        "}"
         "</style>";
 }
+
 
 String getScript() {
     return "<script>"
@@ -223,7 +236,7 @@ String getScript() {
         "    let parts = freqMHz.split('.');"
         "    let mainPart = parts[0] + '.' + parts[1].slice(0, 3);"
         "    let smallPart = parts[1].slice(3, 5);"
-        "    return mainPart + '<span class=\"small\">' + smallPart + '</span><span class=\"unit\">Mhz</span>';"
+        "    return mainPart + '<span class=\"small\">' + smallPart + '</span><span class=\"unit\">MHz</span>';"
         "  } else {"
         "    return freq + ' Hz';"
         "  }"
@@ -239,16 +252,12 @@ String getScript() {
         "  document.getElementById('vdd-progress').style.width = (data.VDD * 100 / 255) + '%';"
         "  document.getElementById('alc-progress').style.width = (data.ALC * 100 / 255) + '%';"
 
-        // Update de S-meter progress bar
         "  let smmProgressBar = document.getElementById('smm-progress');"
         "  smmProgressBar.style.width = (data.SMM * 100 / 255) + '%';"
 
-        // Update de PO meter progress bar
         "  let poProgressBar = document.getElementById('po-progress');"
-
-        // Pas de PO waarde aan van 0-150 naar 0-255 en zet de breedte van de progressbar
-        "  let mappedPO = (data.PO / 150) * 255;"  // PO waarde omzetten naar 255 schaal
-        "  poProgressBar.style.width = (mappedPO / 255) * 37.3 + '%';"  // Zet de breedte van de progressbar
+        "  let mappedPO = (data.PO / 150) * 255;"
+        "  poProgressBar.style.width = (mappedPO / 255) * 37.3 + '%';"
 
         "  const pwrSettingElement = document.getElementById('pwr-setting-value');"
         "  const newPwrSetting = data.pwrsetting;"
@@ -259,7 +268,6 @@ String getScript() {
         "    previousPwrSetting = newPwrSetting;"
         "  }"
 
-        // Band activering
         "  const bands = {"
         "    '160m': [1810000, 2000000],"
         "    '80m': [3500000, 3800000],"
@@ -295,42 +303,115 @@ String getScript() {
         "  }"
         "}"
 
+        "function changeFrequency(vfo, direction) {"
+        "  let stepSelect = document.getElementById('step-select-' + vfo);"
+        "  let step = parseInt(stepSelect.value);"
+        "  let frequencyChange = direction === 'up' ? step : -step;"
+        "  console.log('Change frequency for VFO-' + vfo + ' by ' + frequencyChange + ' Hz');"
+        "  if (socket && socket.readyState === WebSocket.OPEN) {"
+        "    socket.send(JSON.stringify({vfo: vfo, change: frequencyChange}));"
+        "  } else {"
+        "    console.error('WebSocket is not open');"
+        "  }"
+        "}"
+
         "function fetchData() {"
         "  fetch('/values').then(response => response.json()).then(data => updateMeters(data)).catch(error => console.error('Error fetching data:', error));"
         "}"
 
         "window.onload = function() {"
         "  initWebSocket();"
-        "  setInterval(fetchData, 10);" // Haal elke 10 mseconde data op
+        "  setInterval(fetchData, 10);" // Haal elke 10 milliseconde data op
 
-        // Dynamische positionering van de schaalmarkeringen
         "  const scaleMarks = document.querySelectorAll('.scale span');"
         "  scaleMarks.forEach(mark => {"
         "    const value = mark.getAttribute('data-value');"
-        "    const positionPercentage = (value / 255) * 100;" // 255 is de max waarde
+        "    const positionPercentage = (value / 255) * 100;"
         "    mark.style.left = positionPercentage + '%';"
         "  });"
-
         "};"
         "</script>";
 }
+
 
 String getBandButtons() {
     String html = "<div class='band-buttons-container'><div class='band-buttons'>";
     String bands[] = { "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m", "2m", "70cm" };
     for (String band : bands) {
-        html += "<button id='button-" + band + "' onclick=\"sendBandSelectCommand('" + band + "')\">" + band + "</button>";
+        html += "<button id='button-" + band + "' class='band-btn' onclick=\"sendBandSelectCommand('" + band + "')\">" + band + "</button>";
     }
     html += "</div></div>";
     return html;
 }
 
+
 String getVfoDisplays() {
     return "<div class='vfo-display'>"
-        "<div class='vfo'><h2>VFO-A</h2><div id='freq-display_A' class='freq'>Loading...</div></div>"
-        "<div class='vfo'><h2>VFO-B</h2><div id='freq-display_B' class='freq'>Loading...</div></div>"
+        "<div class='vfo'>"
+        "<div id='freq-display_A' class='freq' data-label='VFO-A'>Loading... <span class='unit'>MHz</span></div>"
+        "<div class='vfo-controls'>"
+        "<div class='button-container'>"
+        "<select id='step-select-A' class='step-select'>"
+        "<option value='1'>1 Hz</option>"
+        "<option value='10'>10 Hz</option>"
+        "<option value='20'>20 Hz</option>"
+        "<option value='50'>50 Hz</option>"
+        "<option value='100'>100 Hz</option>"
+        "<option value='500'>500 Hz</option>"
+        "<option value='1000'>1 kHz</option>"
+        "<option value='2500'>2.5 kHz</option>"
+        "<option value='3000'>3 kHz</option>"
+        "<option value='5000'>5 kHz</option>"
+        "<option value='6000'>6 kHz</option>"
+        "<option value='6250'>6.25 kHz</option>"
+        "<option value='8330'>8.33 kHz</option>"
+        "<option value='9000'>9 kHz</option>"
+        "<option value='10000'>10 kHz</option>"
+        "<option value='12000'>12 kHz</option>"
+        "<option value='12500'>12.5 kHz</option>"
+        "<option value='25000'>25 kHz</option>"
+        "<option value='50000'>50 kHz</option>"
+        "</select>"
+        "<button class='freq-btn up' onclick='changeFrequency(\"A\", \"up\")'>&#9650;</button>"
+        "<button class='freq-btn down' onclick='changeFrequency(\"A\", \"down\")'>&#9660;</button>"
+        "</div>"
+        "</div>"
+        "</div>"
+        "<div class='vfo'>"
+        "<div id='freq-display_B' class='freq' data-label='VFO-B'>Loading... <span class='unit'>MHz</span></div>"
+        "<div class='vfo-controls'>"
+        "<div class='button-container'>"
+        "<select id='step-select-B' class='step-select'>"
+        "<option value='1'>1 Hz</option>"
+        "<option value='10'>10 Hz</option>"
+        "<option value='20'>20 Hz</option>"
+        "<option value='50'>50 Hz</option>"
+        "<option value='100'>100 Hz</option>"
+        "<option value='500'>500 Hz</option>"
+        "<option value='1000'>1 kHz</option>"
+        "<option value='2500'>2.5 kHz</option>"
+        "<option value='3000'>3 kHz</option>"
+        "<option value='5000'>5 kHz</option>"
+        "<option value='6000'>6 kHz</option>"
+        "<option value='6250'>6.25 kHz</option>"
+        "<option value='8330'>8.33 kHz</option>"
+        "<option value='9000'>9 kHz</option>"
+        "<option value='10000'>10 kHz</option>"
+        "<option value='12000'>12 kHz</option>"
+        "<option value='12500'>12.5 kHz</option>"
+        "<option value='25000'>25 kHz</option>"
+        "<option value='50000'>50 kHz</option>"
+        "</select>"
+        "<button class='freq-btn up' onclick='changeFrequency(\"B\", \"up\")'>&#9650;</button>"
+        "<button class='freq-btn down' onclick='changeFrequency(\"B\", \"down\")'>&#9660;</button>"
+        "</div>"
+        "</div>"
+        "</div>"
+        "</div>"
+        "</div>"
         "</div>";
 }
+
 
 String getPanelContainer() {
     return "<div class='panel-container'>"

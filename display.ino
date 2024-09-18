@@ -50,9 +50,9 @@ void draw_radio_screen() {
     draw_touchbuttons01();
 
     Display();
-    prevpwrsetting = "0";
+    prevpwrsetting = "005";
     pVDD = 0;
-    prevfreqA = "0";
+    prevfreqA = "000030000";
 }
 // Drawing the meters on display
 

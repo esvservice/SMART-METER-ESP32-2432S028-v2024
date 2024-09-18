@@ -235,4 +235,6 @@ void band_select_AIR() { Serial.print("BS14;"); get_radio_response(); }
 void band_select_2m() { Serial.print("BS15;"); get_radio_response(); }
 void band_select_70cm() { Serial.print("BS16;"); get_radio_response(); }
 
+// SET FREQ CAT COMMANDS
+
 // OTHER CAT COMMANDS

@@ -46,8 +46,6 @@
 #include "touch.h"
 #include "variables.h"
 
-
-
 WebServer server(80); // Creëer een WebServer object op poort 80
 WebSocketsServer webSocket = WebSocketsServer(81); // WebSocket server op poort 81
 
@@ -116,8 +114,6 @@ void handleRoot() {
     server.send(200, "text/html", html);
 }
 
-
-
 // Functie om de WiFi-instellingen te wissen
 void handleReset() {
     server.send(200, "text/html", "<html><body><h1>WiFi-instellingen gewist!</h1><p>Herstart de ESP32 om nieuwe instellingen in te voeren.</p></body></html>");
@@ -126,8 +122,6 @@ void handleReset() {
     wm.resetSettings(); // Wis de WiFi-instellingen
     ESP.restart();      // Herstart de ESP32
 }
-
-
 
 // Websocket event functie
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t* payload, size_t length) {
@@ -139,7 +133,6 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t* payload, size_t length)
         Serial.printf("[%u] Disconnected!\n", num);
     }
 }
-
 
 //Verwerk het command
 void handleCommand(String command) {
@@ -196,6 +189,7 @@ void handleCommand(String command) {
             band_select_70cm();
         }
     }
+
 // Functie om frequentie aan te passen en te versturen
 void changeFrequency(String& freq, int change) {
     long freqValue = freq.toInt();
@@ -296,7 +290,7 @@ String getCSS() {
         "</style>";
 }
 
-
+// Java script functies
 String getScript() {
     return "<script>"
         "let previousPwrSetting = null;"
@@ -437,10 +431,7 @@ String getScript() {
         "</script>";
 }
 
-
-
-
-
+// Functie bandbuttons
 String getBandButtons() {
     String html = "<div class='band-buttons-container'><div class='band-buttons'>";
     String bands[] = { "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m", "2m", "70cm" };
@@ -451,7 +442,7 @@ String getBandButtons() {
     return html;
 }
 
-
+// Functies voor de vfo displays
 String getVfoDisplays() {
     return "<div class='vfo-display'>"
         "<div class='vfo'>"
@@ -509,8 +500,7 @@ String getVfoDisplays() {
         "</div>";
 }
 
-
-
+// get functies
 String getPanelContainer() {
     return "<div class='panel-container'>"
         "<div class='panel'>" + getMeters() + "</div>"
@@ -518,6 +508,7 @@ String getPanelContainer() {
         "</div>";
 }
 
+// functies voor de meters
 String getMeters() {
     return "<div class='panel-content meters'>"
         "<div class='meter' id='swr'><h3>SWR Meter</h3><div class='meter-bar'><div class='scale'><span>1</span><span>1.5</span><span>2</span><span class='yellow'>3</span><span class='red'>5</span><span class='red'>&#8734;</span></div><div id='swr-progress' class='progress'></div></div></div>"
@@ -568,6 +559,7 @@ String getMeters() {
         "</div>";
 }
 
+// functies voor de control buttons
 String getControlButtons() {
     return "<div class='panel-content'>"
         "<h3>Control Buttons - Under Construction - </h3>"

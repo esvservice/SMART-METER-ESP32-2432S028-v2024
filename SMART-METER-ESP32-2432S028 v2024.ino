@@ -51,6 +51,9 @@
 WebServer server(80); // Creëer een WebServer object op poort 80
 WebSocketsServer webSocket = WebSocketsServer(81); // WebSocket server op poort 81
 
+
+
+
 // Functie voor de terminal (homepage)
 void handleRoot() {
     String html = "<html><head>";
@@ -125,9 +128,92 @@ void handleReset() {
 }
 
 
-// Functie om meterwaarden als JSON te verzenden
-void handleGetValues() {
-    // Maak een JSON-object om de waarden op te slaan
+
+// Websocket event functie
+void webSocketEvent(uint8_t num, WStype_t type, uint8_t* payload, size_t length) {
+    if (type == WStype_TEXT) {
+        String command = String((char*)payload);
+        handleCommand(command);
+    }
+    else if (type == WStype_DISCONNECTED) {
+        Serial.printf("[%u] Disconnected!\n", num);
+    }
+}
+
+
+//Verwerk het command
+void handleCommand(String command) {
+    
+    if (command.startsWith("FA")) {
+        FreqA = command.substring(2);
+        //Serial.println("Setting FreqA to: " + FreqA);
+        sendSerialCommand("FA" + FreqA + ";");
+        get_radio_response();
+    }
+    else if (command.startsWith("FB")) {
+        FreqB = command.substring(2);
+        //Serial.println("Setting FreqB to: " + FreqB);
+        sendSerialCommand("FB" + FreqB + ";");
+        get_radio_response();
+    }
+        if (command == "160m") {
+            band_select_160m();
+        }
+        else if (command == "80m") {
+            band_select_80m();
+        }
+        else if (command == "60m") {
+            band_select_60m();
+        }
+        else if (command == "40m") {
+            band_select_40m();
+        }
+        else if (command == "30m") {
+            band_select_30m();
+        }
+        else if (command == "20m") {
+            band_select_20m();
+        }
+        else if (command == "17m") {
+            band_select_17m();
+        }
+        else if (command == "15m") {
+            band_select_15m();
+        }
+        else if (command == "12m") {
+            band_select_12m();
+        }
+        else if (command == "10m") {
+            band_select_10m();
+        }
+        else if (command == "6m") {
+            band_select_6m();
+        }
+        else if (command == "2m") {
+            band_select_2m();
+        }
+        else if (command == "70cm") {
+            band_select_70cm();
+        }
+    }
+// Functie om frequentie aan te passen en te versturen
+void changeFrequency(String& freq, int change) {
+    long freqValue = freq.toInt();
+    freqValue += change;
+    if (freqValue < 0) freqValue = 0; // Zorg ervoor dat frequentie niet negatief wordt
+    freq = String(freqValue);
+    while (freq.length() < 9) {
+        freq = "0" + freq; // Voeg leidende nullen toe tot er 9 cijfers zijn
+    }
+}
+
+// Functie om seriële commando's te versturen
+void sendSerialCommand(String command) {
+    Serial.println(command);
+}
+
+// Functie om meetwaarden te verzenden via websockets
+void sendValues() {
     StaticJsonDocument<200> json;
     json["SWR"] = SWR;
     json["Comp"] = Comp;
@@ -137,15 +223,15 @@ void handleGetValues() {
     json["SMM"] = SMM;
     json["PO"] = PO;
     json["in_tx"] = in_tx;
-    json["FreqA"] = FreqA;  // Voeg FreqA toe aan het JSON-object
-    json["FreqB"] = FreqB;  // Voeg FreqB toe aan het JSON-object
-    json["pwrsetting"] = pwrsetting; // Voeg pwrsetting toe aan het JSON-object
+    json["prevfreqA"] = prevfreqA.toInt();
+    json["prevfreqB"] = prevfreqB.toInt();
+    json["FreqA"] = FreqA.toInt();
+    json["FreqB"] = FreqB.toInt();
+    json["pwrsetting"] = pwrsetting;
 
     String jsonOutput;
     serializeJson(json, jsonOutput);
-
-    // Verstuur de JSON-data
-    server.send(200, "application/json", jsonOutput);
+    webSocket.broadcastTXT(jsonOutput);
 }
 
 // Root HTML-pagina met meters met AJAX om de waarden te verversen
@@ -158,6 +244,7 @@ void handleMeterPage() {
     server.send(200, "text/html", html);
 }
 
+// Functies voor de HTML-pagina
 String getCSS() {
     return "<style>"
         "body { background-color: #1e1e1e; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }"
@@ -218,16 +305,31 @@ String getScript() {
         "function initWebSocket() {"
         "  socket = new WebSocket('ws://' + window.location.hostname + ':81/');"
         "  socket.onopen = function() { console.log('WebSocket connection open'); };"
-        "  socket.onmessage = function(event) { console.log('Message from server ', event.data); };"
+        "  socket.onmessage = function(event) {"
+        "    const data = JSON.parse(event.data);"
+        "    updateMeters(data);"
+        "  };"
         "  socket.onclose = function() { console.log('WebSocket connection closed'); };"
         "}"
 
         "function sendBandSelectCommand(band) {"
         "  if (socket && socket.readyState === WebSocket.OPEN) {"
         "    socket.send(band);"
+        "    setDefaultStep(band);"
         "  } else {"
         "    console.error('WebSocket is not open');"
         "  }"
+        "}"
+
+        "function setDefaultStep(band) {"
+        "  let stepValue;"
+        "  if (['2m', '70cm'].includes(band)) {"
+        "    stepValue = '12500';" // 12.5 kHz for VHF/UHF
+        "  } else {"
+        "    stepValue = '100';" // 100 Hz for HF bands
+        "  }"
+        "  document.getElementById('step-select-A').value = stepValue;"
+        "  document.getElementById('step-select-B').value = stepValue;"
         "}"
 
         "function formatFrequency(freq) {"
@@ -244,8 +346,14 @@ String getScript() {
 
         "function updateMeters(data) {"
         "  console.log('Updating meters with data:', data);"
-        "  document.getElementById('freq-display_A').innerHTML = formatFrequency(data.FreqA);"
-        "  document.getElementById('freq-display_B').innerHTML = formatFrequency(data.FreqB);"
+        "  let freqDisplayA = document.getElementById('freq-display_A');"
+        "  freqDisplayA.innerHTML = formatFrequency(data.FreqA);"
+        "  freqDisplayA.setAttribute('data-freq', data.FreqA);"
+
+        "  let freqDisplayB = document.getElementById('freq-display_B');"
+        "  freqDisplayB.innerHTML = formatFrequency(data.FreqB);"
+        "  freqDisplayB.setAttribute('data-freq', data.FreqB);"
+
         "  document.getElementById('swr-progress').style.width = (data.SWR * 100 / 255) + '%';"
         "  document.getElementById('comp-progress').style.width = (data.Comp * 100 / 255) + '%';"
         "  document.getElementById('idd-progress').style.width = (data.IDD * 100 / 255) + '%';"
@@ -307,31 +415,30 @@ String getScript() {
         "  let stepSelect = document.getElementById('step-select-' + vfo);"
         "  let step = parseInt(stepSelect.value);"
         "  let frequencyChange = direction === 'up' ? step : -step;"
-        "  console.log('Change frequency for VFO-' + vfo + ' by ' + frequencyChange + ' Hz');"
-        "  if (socket && socket.readyState === WebSocket.OPEN) {"
-        "    socket.send(JSON.stringify({vfo: vfo, change: frequencyChange}));"
-        "  } else {"
-        "    console.error('WebSocket is not open');"
-        "  }"
-        "}"
 
-        "function fetchData() {"
-        "  fetch('/values').then(response => response.json()).then(data => updateMeters(data)).catch(error => console.error('Error fetching data:', error));"
+        "  if (vfo === 'A') {"
+        "    let currentFreq = parseInt(document.getElementById('freq-display_A').getAttribute('data-freq'));"
+        "    let newFreq = currentFreq + frequencyChange;"
+        "    let freqString = newFreq.toString().padStart(9, '0');"
+        "    socket.send('FA' + freqString);"
+        "    document.getElementById('freq-display_A').setAttribute('data-freq', newFreq);"
+        "  } else if (vfo === 'B') {"
+        "    let currentFreq = parseInt(document.getElementById('freq-display_B').getAttribute('data-freq'));"
+        "    let newFreq = currentFreq + frequencyChange;"
+        "    let freqString = newFreq.toString().padStart(9, '0');"
+        "    socket.send('FB' + freqString);"
+        "    document.getElementById('freq-display_B').setAttribute('data-freq', newFreq);"
+        "  }"
         "}"
 
         "window.onload = function() {"
         "  initWebSocket();"
-        "  setInterval(fetchData, 10);" // Haal elke 10 milliseconde data op
-
-        "  const scaleMarks = document.querySelectorAll('.scale span');"
-        "  scaleMarks.forEach(mark => {"
-        "    const value = mark.getAttribute('data-value');"
-        "    const positionPercentage = (value / 255) * 100;"
-        "    mark.style.left = positionPercentage + '%';"
-        "  });"
         "};"
         "</script>";
 }
+
+
+
 
 
 String getBandButtons() {
@@ -348,7 +455,7 @@ String getBandButtons() {
 String getVfoDisplays() {
     return "<div class='vfo-display'>"
         "<div class='vfo'>"
-        "<div id='freq-display_A' class='freq' data-label='VFO-A'>Loading... <span class='unit'>MHz</span></div>"
+        "<div id='freq-display_A' class='freq' data-label='VFO-A' data-freq='" + prevfreqA + "'>Loading... <span class='unit'>MHz</span></div>"
         "<div class='vfo-controls'>"
         "<div class='button-container'>"
         "<select id='step-select-A' class='step-select'>"
@@ -374,7 +481,7 @@ String getVfoDisplays() {
         "</div>"
         "</div>"
         "<div class='vfo'>"
-        "<div id='freq-display_B' class='freq' data-label='VFO-B'>Loading... <span class='unit'>MHz</span></div>"
+        "<div id='freq-display_B' class='freq' data-label='VFO-B' data-freq='" + prevfreqB + "'>Loading... <span class='unit'>MHz</span></div>"
         "<div class='vfo-controls'>"
         "<div class='button-container'>"
         "<select id='step-select-B' class='step-select'>"
@@ -399,10 +506,9 @@ String getVfoDisplays() {
         "</div>"
         "</div>"
         "</div>"
-        "</div>"
-        "</div>"
         "</div>";
 }
+
 
 
 String getPanelContainer() {
@@ -490,54 +596,14 @@ void loop() {
     server.handleClient(); // Afhandelen van inkomende HTTP-verzoeken
     webSocket.loop(); // Beheer van WebSocket-verzoeken en -verbindingen
 
-
-
-
-}
-
-
-void webSocketEvent(uint8_t num, WStype_t type, uint8_t* payload, size_t length) {
-    if (type == WStype_TEXT) {
-        String command = String((char*)payload);
-
-        if (command == "160m") {
-            band_select_160m();
-        }
-        else if (command == "80m") {
-            band_select_80m();
-        }
-        else if (command == "60m") {
-            band_select_60m();
-        }
-        else if (command == "40m") {
-            band_select_40m();
-        }
-        else if (command == "30m") {
-            band_select_30m();
-        }
-        else if (command == "20m") {
-            band_select_20m();
-        }
-        else if (command == "17m") {
-            band_select_17m();
-        }
-        else if (command == "15m") {
-            band_select_15m();
-        }
-        else if (command == "12m") {
-            band_select_12m();
-        }
-        else if (command == "10m") {
-            band_select_10m();
-        }
-        else if (command == "6m") {
-            band_select_6m();
-        }
-        else if (command == "2m") {
-            band_select_2m();
-        }
-        else if (command == "70cm") {
-            band_select_70cm();
-        }
+    // Elke 100 mseconde de waarden verzenden
+    static unsigned long lastTime = 0;
+    if (millis() - lastTime > 100) {
+        lastTime = millis();
+        sendValues();
     }
+
+
 }
+
+

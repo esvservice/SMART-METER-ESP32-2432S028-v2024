@@ -73,3 +73,9 @@ String MyipAddress;             // ipadres when connected with wifi
 
 //Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO); // Invoke custom library
 bool tuneflag = false;
+
+// Simulatie van meetwaarden
+//float SWR = 1.5, Comp = 3.0, IDD = 10.0, VDD = 13.8, ALC = 50.0, SMM = 0.0, PO = 100.0;
+//bool in_tx = false;
+//String FreqA = "7000000", FreqB = "14000000"; // Strings voor frequenties
+//int pwrsetting = 50;

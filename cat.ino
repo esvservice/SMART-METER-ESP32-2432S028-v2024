@@ -122,9 +122,9 @@ void cat()
     prevpwrsetting = pwrsetting;                                      // present setting now becomes previous setting
     tft.setTextSize(1);
 
-    Serial.print("FA;");                                              // send CAT command to the radio, ask what power has been set
+    Serial.print("FA;");                                              // send CAT command to the radio, ask what freq has been set on VFO A
     get_radio_response();                                             // call routine to read from radio
-    CAT_buffer.remove(0, 2);                                          // remove characters PC
+    CAT_buffer.remove(0, 2);                                          // remove characters FA
     if (CAT_buffer.startsWith("0")) {                                 // remove leading zero if present
         CAT_buffer.remove(0, 1);
         if (CAT_buffer.startsWith("0")) {                               // remove leading zero if present
@@ -134,9 +134,9 @@ void cat()
 
     FreqA = CAT_buffer;                                          // present setting to freqasetting
 
-    Serial.print("FB;");                                              // send CAT command to the radio, ask what power has been set
+    Serial.print("FB;");                                              // send CAT command to the radio, ask what freq has been set on VFO B
     get_radio_response();                                             // call routine to read from radio
-    CAT_buffer.remove(0, 2);                                          // remove characters PC
+    CAT_buffer.remove(0, 2);                                          // remove characters FB
     if (CAT_buffer.startsWith("0")) {                                 // remove leading zero if present
         CAT_buffer.remove(0, 1);
         if (CAT_buffer.startsWith("0")) {                               // remove leading zero if present
@@ -161,7 +161,19 @@ void cat()
     prevfreqA = FreqA;                                      // present setting now becomes previous setting
     tft.setTextSize(1);
 
+    if (prevfreqB != FreqB)                                 // if setting has changed since last read
+    {
+      // hier eventueel zaken om op scherm te zetten                                   
+    }
+    prevfreqB = FreqB;              // present setting now becomes previous setting
+
+
+    //end
 }
+
+
+
+
 
 
 

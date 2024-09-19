@@ -36,7 +36,11 @@ static void wifisetup32() {
         screen1text(); // refresh screen
 
         // Start de HTTP-server op poort 80
-        server.on("/", handleMeterPage);
+        server.on("/", handleMeterPage); // Webpagina met meters / root pagina
+        server.on("/terminal", handleRoot); // testpagina 
+        // Stel de reset route in voor WiFi-instellingen
+        server.on("/reset", HTTP_POST, handleReset);
+        
         server.begin();
         Serial.println("Webserver gestart. poort 80");
 
@@ -47,30 +51,6 @@ static void wifisetup32() {
         
     }
     
-    
-    // Stel de root route in
-    server.on("/terminal", handleRoot);
-
-    // Webserver routes
-    server.on("/", handleMeterPage);    // Webpagina met meters
-    server.on("/values", handleGetValues); // JSON met meterwaarden
-
-    // Stel de reset route in voor WiFi-instellingen
-    server.on("/reset", HTTP_POST, handleReset);
-
-    // Start de webserver & socketserver
-    server.begin();
-    webSocket.begin();
-
-
-
-    // reset settings - wipe stored credentials for testing
-           // these are stored by the esp library
-    if (tuneflag == true) {
-            wm.resetSettings();
-     }
-     else {
-     //WiFiManager wm;
-        }
+  
     }
 

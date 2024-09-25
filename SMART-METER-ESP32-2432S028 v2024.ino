@@ -344,7 +344,7 @@ String getScript() {
 
         "  let poProgressBar = document.getElementById('po-progress');"
         "  let mappedPO = (data.PO / 150) * 255;"
-        "  poProgressBar.style.width = (mappedPO / 255) * 37.3 + '%';"
+        "  poProgressBar.style.width = (mappedPO / 255) * 100 + '%';"
 
         "  const pwrSettingElement = document.getElementById('pwr-setting-value');"
         "  const newPwrSetting = data.pwrsetting;"
@@ -359,16 +359,80 @@ String getScript() {
         "    updateModeSelect(data.MD);"
         "    prevMD = data.MD;"
         "  }"
+
+        "  updateBandSelection(data.FreqA);"
         "}"
 
         "function updateModeSelect(md) {"
         "  const modeSelect = document.getElementById('mode-select-A');"
         "  if (modeSelect) {"
-        "    console.log('Attempting to set mode select to:', md);"
-        "    modeSelect.value = md;"
-        "    console.log('Mode select updated to:', modeSelect.value);"
+        "    modeSelect.value = md.toString();"
         "  } else {"
         "    console.error('Mode select element not found');"
+        "  }"
+        "}"
+
+        "function updateBandSelection(freq) {"
+        "  const bands = {"
+        "    '160m': [1810000, 2000000],"
+        "    '80m': [3500000, 3800000],"
+        "    '60m': [5351500, 5366500],"
+        "    '40m': [7000000, 7200000],"
+        "    '30m': [10100000, 10150000],"
+        "    '20m': [14000000, 14350000],"
+        "    '17m': [18068000, 18168000],"
+        "    '15m': [21000000, 21450000],"
+        "    '12m': [24890000, 24990000],"
+        "    '10m': [28000000, 29700000],"
+        "    '6m': [50000000, 54000000],"
+        "    '2m': [144000000, 146000000],"
+        "    '70cm': [430000000, 440000000]"
+        "  };"
+
+        "  for (let band in bands) {"
+        "    let button = document.getElementById('button-' + band);"
+        "    let range = bands[band];"
+        "    if (freq >= range[0] && freq <= range[1]) {"
+        "      button.classList.add('active');"
+        "    } else {"
+        "      button.classList.remove('active');"
+        "    }"
+        "  }"
+        "}"
+
+        "function sendBandSelectCommand(band) {"
+        "  if (socket && socket.readyState === WebSocket.OPEN) {"
+        "    socket.send(band);"
+        "    setDefaultStep(band);"
+        "  } else {"
+        "    console.error('WebSocket is not open');"
+        "  }"
+        "}"
+
+        "function setDefaultStep(band) {"
+        "  const defaultSteps = {"
+        "    '160m': 100,"
+        "    '80m': 100,"
+        "    '60m': 100,"
+        "    '40m': 100,"
+        "    '30m': 100,"
+        "    '20m': 100,"
+        "    '17m': 100,"
+        "    '15m': 100,"
+        "    '12m': 100,"
+        "    '10m': 100,"
+        "    '6m': 100,"
+        "    '2m': 12500,"   // Originele waarde voor VHF
+        "    '70cm': 12500" // Originele waarde voor UHF
+        "  };"
+        "  let step = defaultSteps[band];"
+        "  if (step) {"
+        "    let stepSelect = document.getElementById('step-select-A');"
+        "    if (stepSelect) {"
+        "      stepSelect.value = step.toString();"
+        "    }"
+        "  } else {"
+        "    console.error('No default step for band:', band);"
         "  }"
         "}"
 
@@ -423,7 +487,6 @@ String getScript() {
         "};"
         "</script>";
 }
-
 
 
 // Functie bandbuttons

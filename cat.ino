@@ -60,7 +60,13 @@ void cat()
     convert_CAT_buffer();                                    // CAT_buffer holds received string in format: RMNVVV000; N=meternumber, VVV is wanted value
     FreqB = CAT_buffer.toInt();                              // store string as int in FreqB to be displayed as text
 
-
+    // read Mode
+    Serial.print("MD0;");                                     // send CAT command to the radio, ask mode value
+    get_radio_response();                                    // call routine to read from radio
+    convert_CAT_buffer();                                    // CAT_buffer holds received string in format: RMNVVV000; N=meternumber, VVV is wanted value
+    //MD = CAT_buffer.toInt();                                // store string as int in MD to be displayed as text
+    // Extract the relevant part of the CAT_buffer
+    MD = CAT_buffer;
 
     // read comp meter
     Serial.print("RM3;");                                    // send CAT command to the radio, ask comp value

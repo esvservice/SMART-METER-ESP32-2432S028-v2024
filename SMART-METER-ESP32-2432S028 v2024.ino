@@ -149,6 +149,14 @@ void handleCommand(String command) {
         sendSerialCommand("FB" + FreqB + ";");
         get_radio_response();
     }
+
+    if (command.startsWith("MD0")) {
+        String newMode = command.substring(3, 4);
+        MD = newMode;
+        sendSerialCommand("MD0" + newMode + ";");
+        get_radio_response();
+    }
+
         if (command == "160m") {
             band_select_160m();
         }
@@ -222,7 +230,7 @@ void sendValues() {
     json["FreqA"] = FreqA.toInt();
     json["FreqB"] = FreqB.toInt();
     json["pwrsetting"] = pwrsetting;
-
+    json["MD"] = MD;
     String jsonOutput;
     serializeJson(json, jsonOutput);
     webSocket.broadcastTXT(jsonOutput);
@@ -243,17 +251,17 @@ String getCSS() {
     return "<style>"
         "body { background-color: #1e1e1e; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }"
         ".vfo-display { display: flex; justify-content: space-around; padding: 20px; background-color: #1e1e1e; gap: 20px; }"
-        ".vfo { flex: 1; position: relative; padding: 15px; background-color: #333; border-radius: 12px; box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.7), 0 4px 8px rgba(0, 0, 0, 0.5); min-width: 250px; }"
-        ".freq { position: relative; display: flex; align-items: center; justify-content: center; height: 100px; font-size: 4vw; font-weight: bold; color: #FFD700; background-color: #222; border-radius: 10px; box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.7); }"
+        ".vfo { flex: 1; position: relative; padding: 15px; background-color: #333; border-radius: 12px; box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.7), 0 4px 8px rgba(0, 0, 0, 0.5); min-width: 250px; display: flex; flex-direction: column; align-items: center; }"
+        ".freq { position: relative; display: flex; align-items: center; justify-content: center; height: 100px; font-size: 4vw; font-weight: bold; color: #FFD700; background-color: #222; border-radius: 10px; box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.7); width: 100%; }"
         ".freq::before { content: attr(data-label); position: absolute; top: 10px; left: 10px; font-size: 14px; color: #FFD700; }"
         ".freq .small { font-size: 0.5em; vertical-align: sub; }"
         ".freq .unit { font-size: 0.5em; margin-left: 10px; }"
-        ".vfo-controls { position: absolute; top: 10px; right: 10px; display: flex; align-items: center; gap: 5px; }"
+        ".vfo-controls { position: relative; display: flex; align-items: center; gap: 5px; margin-top: 10px; }"
         ".button-container { display: flex; gap: 5px; }"
         ".freq-btn { background-color: #333; color: #FFD700; border: 2px solid #555; border-radius: 50%; padding: 5px; cursor: pointer; font-size: 14px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.7); transition: background-color 0.2s, box-shadow 0.2s; }"
         ".freq-btn:hover { background-color: #444; box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 6px 12px rgba(0, 0, 0, 0.9); }"
-        ".step-select { background-color: #333; color: #FFD700; border: 2px solid #555; border-radius: 50%; padding: 5px; font-size: 12px; width: 70px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.7); transition: background-color 0.2s, box-shadow 0.2s; appearance: none; cursor: pointer; }"
-        ".step-select:focus { outline: none; border-color: #00ff00; }"
+        ".step-select, #mode-select-A { background-color: #333; color: #FFD700; border: 2px solid #555; border-radius: 50%; padding: 5px; font-size: 12px; width: 70px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.7); transition: background-color 0.2s, box-shadow 0.2s; appearance: none; cursor: pointer; }"
+        ".step-select:focus, #mode-select-A:focus { outline: none; border-color: #00ff00; }"
         ".band-buttons-container { display: flex; justify-content: center; background-color: #1e1e1e; padding: 10px; margin-top: 5px; }"
         ".band-buttons { display: flex; justify-content: space-between; width: 100%; max-width: 800px; gap: 10px; }"
         ".band-btn { background-color: #333; color: #FFD700; border: 2px solid #555; border-radius: 5px; cursor: pointer; font-size: 1vw; width: 80px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.7); transition: background-color 0.2s, box-shadow 0.2s; position: relative; }"
@@ -285,77 +293,54 @@ String getCSS() {
         "@media (max-width: 600px) {"
         "  .freq-btn { width: 24px; height: 24px; font-size: 12px; }"
         "  .band-btn { width: 70px; height: 35px; font-size: 2.5vw; }"
-        "  .step-select { width: 60px; font-size: 9px; }"
+        "  .step-select, #mode-select-A { width: 60px; font-size: 9px; }"
         "}"
         "</style>";
 }
+
 
 // Java script functies
 String getScript() {
     return "<script>"
         "let previousPwrSetting = null;"
+        "let prevMD = null;"
         "let socket;"
 
         "function initWebSocket() {"
         "  socket = new WebSocket('ws://' + window.location.hostname + ':81/');"
-        "  socket.onopen = function() { console.log('WebSocket connection open'); };"
-        "  socket.onmessage = function(event) {"
-        "    const data = JSON.parse(event.data);"
-        "    updateMeters(data);"
+        "  socket.onopen = function() {"
+        "    console.log('WebSocket connection open');"
         "  };"
-        "  socket.onclose = function() { console.log('WebSocket connection closed'); };"
-        "}"
-
-        "function sendBandSelectCommand(band) {"
-        "  if (socket && socket.readyState === WebSocket.OPEN) {"
-        "    socket.send(band);"
-        "    setDefaultStep(band);"
-        "  } else {"
-        "    console.error('WebSocket is not open');"
-        "  }"
-        "}"
-
-        "function setDefaultStep(band) {"
-        "  let stepValue;"
-        "  if (['2m', '70cm'].includes(band)) {"
-        "    stepValue = '12500';" // 12.5 kHz for VHF/UHF
-        "  } else {"
-        "    stepValue = '100';" // 100 Hz for HF bands
-        "  }"
-        "  document.getElementById('step-select-A').value = stepValue;"
-        "  document.getElementById('step-select-B').value = stepValue;"
-        "}"
-
-        "function formatFrequency(freq) {"
-        "  if (freq >= 1000000) {"
-        "    let freqMHz = (freq / 1000000).toFixed(6);"
-        "    let parts = freqMHz.split('.');"
-        "    let mainPart = parts[0] + '.' + parts[1].slice(0, 3);"
-        "    let smallPart = parts[1].slice(3, 5);"
-        "    return mainPart + '<span class=\"small\">' + smallPart + '</span><span class=\"unit\">MHz</span>';"
-        "  } else {"
-        "    return freq + ' Hz';"
-        "  }"
+        "  socket.onmessage = function(event) {"
+        "    console.log('Message received:', event.data);"
+        "    try {"
+        "      const data = JSON.parse(event.data);"
+        "      updateMeters(data);"
+        "    } catch (error) {"
+        "      console.error('Error parsing JSON:', error);"
+        "    }"
+        "  };"
+        "  socket.onerror = function(error) {"
+        "    console.error('WebSocket error:', error);"
+        "  };"
+        "  socket.onclose = function() {"
+        "    console.log('WebSocket connection closed');"
+        "  };"
         "}"
 
         "function updateMeters(data) {"
         "  console.log('Updating meters with data:', data);"
-        "  let freqDisplayA = document.getElementById('freq-display_A');"
-        "  freqDisplayA.innerHTML = formatFrequency(data.FreqA);"
-        "  freqDisplayA.setAttribute('data-freq', data.FreqA);"
-
-        "  let freqDisplayB = document.getElementById('freq-display_B');"
-        "  freqDisplayB.innerHTML = formatFrequency(data.FreqB);"
-        "  freqDisplayB.setAttribute('data-freq', data.FreqB);"
+        "  document.getElementById('freq-display_A').innerHTML = formatFrequency(data.FreqA);"
+        "  document.getElementById('freq-display_A').setAttribute('data-freq', data.FreqA);"
+        "  document.getElementById('freq-display_B').innerHTML = formatFrequency(data.FreqB);"
+        "  document.getElementById('freq-display_B').setAttribute('data-freq', data.FreqB);"
 
         "  document.getElementById('swr-progress').style.width = (data.SWR * 100 / 255) + '%';"
         "  document.getElementById('comp-progress').style.width = (data.Comp * 100 / 255) + '%';"
         "  document.getElementById('idd-progress').style.width = (data.IDD * 100 / 255) + '%';"
         "  document.getElementById('vdd-progress').style.width = (data.VDD * 100 / 255) + '%';"
         "  document.getElementById('alc-progress').style.width = (data.ALC * 100 / 255) + '%';"
-
-        "  let smmProgressBar = document.getElementById('smm-progress');"
-        "  smmProgressBar.style.width = (data.SMM * 100 / 255) + '%';"
+        "  document.getElementById('smm-progress').style.width = (data.SMM * 100 / 255) + '%';"
 
         "  let poProgressBar = document.getElementById('po-progress');"
         "  let mappedPO = (data.PO / 150) * 255;"
@@ -370,38 +355,32 @@ String getScript() {
         "    previousPwrSetting = newPwrSetting;"
         "  }"
 
-        "  const bands = {"
-        "    '160m': [1810000, 2000000],"
-        "    '80m': [3500000, 3800000],"
-        "    '60m': [5351500, 5366500],"
-        "    '40m': [7000000, 7200000],"
-        "    '30m': [10100000, 10150000],"
-        "    '20m': [14000000, 14350000],"
-        "    '17m': [18068000, 18168000],"
-        "    '15m': [21000000, 21450000],"
-        "    '12m': [24890000, 24990000],"
-        "    '10m': [28000000, 29700000],"
-        "    '6m': [50000000, 54000000],"
-        "    '2m': [144000000, 146000000],"
-        "    '70cm': [430000000, 440000000]"
-        "  };"
-        "  for (let band in bands) {"
-        "    let button = document.getElementById('button-' + band);"
-        "    let range = bands[band];"
-        "    if (data.FreqA >= range[0] && data.FreqA <= range[1]) {"
-        "      button.classList.add('active');"
-        "    } else {"
-        "      button.classList.remove('active');"
-        "    }"
+        "  if (prevMD !== data.MD) {"
+        "    updateModeSelect(data.MD);"
+        "    prevMD = data.MD;"
         "  }"
+        "}"
 
-        "  let vfoAHeader = document.querySelector('.vfo-display .vfo h2');"
-        "  if (data.in_tx) {"
-        "    vfoAHeader.style.color = '#ff0000';"
-        "  } else if (data.SMM > 0) {"
-        "    vfoAHeader.style.color = '#00ff00';"
+        "function updateModeSelect(md) {"
+        "  const modeSelect = document.getElementById('mode-select-A');"
+        "  if (modeSelect) {"
+        "    console.log('Attempting to set mode select to:', md);"
+        "    modeSelect.value = md;"
+        "    console.log('Mode select updated to:', modeSelect.value);"
         "  } else {"
-        "    vfoAHeader.style.color = '#ffffff';"
+        "    console.error('Mode select element not found');"
+        "  }"
+        "}"
+
+        "function formatFrequency(freq) {"
+        "  if (freq >= 1000000) {"
+        "    let freqMHz = (freq / 1000000).toFixed(6);"
+        "    let parts = freqMHz.split('.');"
+        "    let mainPart = parts[0] + '.' + parts[1].slice(0, 3);"
+        "    let smallPart = parts[1].slice(3, 5);"
+        "    return mainPart + '<span class=\"small\">' + smallPart + '</span><span class=\"unit\">MHz</span>';"
+        "  } else {"
+        "    return freq + ' Hz';"
         "  }"
         "}"
 
@@ -427,9 +406,25 @@ String getScript() {
 
         "window.onload = function() {"
         "  initWebSocket();"
+        "  const modeSelect = document.getElementById('mode-select-A');"
+        "  if (modeSelect) {"
+        "    modeSelect.addEventListener('change', function() {"
+        "      const selectedMode = this.value;"
+        "      const command = 'MD0' + selectedMode + ';';"
+        "      if (socket && socket.readyState === WebSocket.OPEN) {"
+        "        socket.send(command);"
+        "      } else {"
+        "        console.error('WebSocket is not open');"
+        "      }"
+        "    });"
+        "  } else {"
+        "    console.error('Mode select element not found on window load');"
+        "  }"
         "};"
         "</script>";
 }
+
+
 
 // Functie bandbuttons
 String getBandButtons() {
@@ -446,9 +441,24 @@ String getBandButtons() {
 String getVfoDisplays() {
     return "<div class='vfo-display'>"
         "<div class='vfo'>"
-        "<div id='freq-display_A' class='freq' data-label='VFO-A' data-freq='" + prevfreqA + "'>Loading... <span class='unit'>MHz</span></div>"
+        "<div class='freq' data-label='VFO-A' data-freq='" + prevfreqA + "' id='freq-display_A'>Loading... <span class='unit'>MHz</span></div>"
         "<div class='vfo-controls'>"
-        "<div class='button-container'>"
+        "<select id='mode-select-A' class='step-select'>"  // Mode selector naast VFO-A
+        "<option value='1'>LSB</option>"
+        "<option value='2'>USB</option>"
+        "<option value='3'>CW-USB</option>"
+        "<option value='4'>FM</option>"
+        "<option value='5'>AM</option>"
+        "<option value='6'>RTTY-LSB</option>"
+        "<option value='7'>CW-LSB</option>"
+        "<option value='8'>DATA-LSB</option>"
+        "<option value='9'>RTTY-USB</option>"
+        "<option value='A'>DATA-FM</option>"
+        "<option value='B'>FM-N</option>"
+        "<option value='C'>DATA-USB</option>"
+        "<option value='D'>AM-N</option>"
+        "<option value='E'>C4FM</option>"
+        "</select>"
         "<select id='step-select-A' class='step-select'>"
         "<option value='100'>100 Hz</option>"
         "<option value='500'>500 Hz</option>"
@@ -470,11 +480,9 @@ String getVfoDisplays() {
         "<button class='freq-btn down' onclick='changeFrequency(\"A\", \"down\")'>&#9660;</button>"
         "</div>"
         "</div>"
-        "</div>"
         "<div class='vfo'>"
-        "<div id='freq-display_B' class='freq' data-label='VFO-B' data-freq='" + prevfreqB + "'>Loading... <span class='unit'>MHz</span></div>"
+        "<div class='freq' data-label='VFO-B' data-freq='" + prevfreqB + "' id='freq-display_B'>Loading... <span class='unit'>MHz</span></div>"
         "<div class='vfo-controls'>"
-        "<div class='button-container'>"
         "<select id='step-select-B' class='step-select'>"
         "<option value='100'>100 Hz</option>"
         "<option value='500'>500 Hz</option>"
@@ -496,9 +504,10 @@ String getVfoDisplays() {
         "<button class='freq-btn down' onclick='changeFrequency(\"B\", \"down\")'>&#9660;</button>"
         "</div>"
         "</div>"
-        "</div>"
         "</div>";
 }
+
+
 
 // get functies
 String getPanelContainer() {

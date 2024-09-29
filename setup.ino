@@ -34,6 +34,9 @@ void setup() {
 	//		=> IO22(GPIO Pin 22, overlapt met connector P3)
 	//		=> IO27(GPIO - pen 27)
 	//		=> 3, 3V(voedingsspanning 3, 3V, ca. 20 mA)
+	
+	pinMode(RELAY_PIN, OUTPUT); // GPIO pin 27 aansturen van een RELAY tijdens TX
+
 	//-----------------------------------------------------------------------------------------------------------------------//
 	// 
 	// Andere aangesloten apparaten:

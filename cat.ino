@@ -12,8 +12,8 @@ void cat()
 
     // check if in TX, if yes then draw PO meter, otherwise draw S meter, do this only once to avoid flicker
 
-    Serial.print("TX;");                                              // send CAT command to the radio, ask for TX status
-    get_radio_response();                                             // call routine to read from radio
+    Serial.print("TX;");                                                // send CAT command to the radio, ask for TX status
+    get_radio_response();                                               // call routine to read from radio
     if ((((CAT_buffer.startsWith("TX2")) || (CAT_buffer.startsWith("TX1"))) && (txrx_flag1 == false))) {  // ask if the transceiver is in TX (PTT or CAT, for the first loop)
         draw_PO_meter();                                                // draw the PO meter outline, can be substituted by S meter
         in_tx = true;                                                   // set flag we are in TX
@@ -24,10 +24,10 @@ void cat()
     }
     else {
         if ((txrx_flag2 == true) && (CAT_buffer == ("TX0"))) {          // we are in RX, check if this is the first RX loop
-            in_tx = false;                                                // reset tx flag to false
-            draw_M_S1_meter();                                             // call draw S meter outline, can be substituted by PO meter
-            txrx_flag1 = false;                                           // flag so that text and clear is only written once, toggle function
-            txrx_flag2 = false;                                           // flag so that text and clear is only written once, toggle function
+            in_tx = false;                                              // reset tx flag to false
+            draw_M_S1_meter();                                          // call draw S meter outline, can be substituted by PO meter
+            txrx_flag1 = false;                                         // flag so that text and clear is only written once, toggle function
+            txrx_flag2 = false;                                         // flag so that text and clear is only written once, toggle function
         }
     }
     if (in_tx == false) {                                               // not in TX, now read S meter
@@ -36,13 +36,8 @@ void cat()
         convert_CAT_buffer();                                           // CAT_buffer holds received string in format: RMNVVV000; N=meternumber, VVV is wanted value
         SMM = CAT_buffer.toInt();                                       // store string as int in SSM to be displayed as S meter bar
         if (main_flag1 == false) {                                      // clear area and write the text S, but only once to reduce flicker
-            
-            //tft.fillRect((X - 44), (Y + 175), 42, 20, BLACK);           // clear the text area
-            //tft.setCursor(Z, (Y + 178));
-            //tft.setTextColor(SILVER);                                   // set textcolor
-            //tft.setTextSize(2);
-            //tft.println("  S");                                         // display text of receiver meter bar
-            //tft.setTextSize(1);                                         // display text of receiver meter bar
+        
+        
         }
         main_flag1 = true;                                              // flag so that text and clear is only written once, toggle function
         main_flag2 = true;                                              // flag so that text and clear is only written once, toggle function
@@ -52,7 +47,7 @@ void cat()
     Serial.print("FA;");                                     // send CAT command to the radio, ask comp value
     get_radio_response();                                    // call routine to read from radio
     convert_CAT_buffer();                                    // CAT_buffer holds received string in format: RMNVVV000; N=meternumber, VVV is wanted value
-    FreqA = CAT_buffer.toInt();                                // store string as int in freqa to be displayed as text
+    FreqA = CAT_buffer.toInt();                              // store string as int in freqa to be displayed as text
 
     // read Freq VFO B
     Serial.print("FB;");                                     // send CAT command to the radio, ask comp value
@@ -61,10 +56,10 @@ void cat()
     FreqB = CAT_buffer.toInt();                              // store string as int in FreqB to be displayed as text
 
     // read Mode
-    Serial.print("MD0;");                                     // send CAT command to the radio, ask mode value
+    Serial.print("MD0;");                                    // send CAT command to the radio, ask mode value
     get_radio_response();                                    // call routine to read from radio
     convert_CAT_buffer();                                    // CAT_buffer holds received string in format: RMNVVV000; N=meternumber, VVV is wanted value
-    //MD = CAT_buffer.toInt();                                // store string as int in MD to be displayed as text
+    //MD = CAT_buffer.toInt();                               // store string as int in MD to be displayed as text
     // Extract the relevant part of the CAT_buffer
     MD = CAT_buffer;
 
@@ -72,7 +67,7 @@ void cat()
     Serial.print("RM3;");                                    // send CAT command to the radio, ask comp value
     get_radio_response();                                    // call routine to read from radio
     convert_CAT_buffer();                                    // CAT_buffer holds received string in format: RMNVVV000; N=meternumber, VVV is wanted value
-    Comp = CAT_buffer.toInt();                                // store string as int in Comp to be displayed as Comp meter bar
+    Comp = CAT_buffer.toInt();                               // store string as int in Comp to be displayed as Comp meter bar
 
     // read ALC meter
     Serial.print("RM4;");                                    // send CAT command to the radio, ask ALC value
@@ -81,10 +76,10 @@ void cat()
     ALC = CAT_buffer.toInt();                                // store string as int in ALC to be displayed as ALC meter bar
 
     //read power meter
-    Serial.print("RM5;");                                  // send CAT command to the radio, ask PO value
-    get_radio_response();                                  // call routine to read from radio
-    convert_CAT_buffer();                                  // CAT_buffer holds received string in format: RMNVVV000; N=meternumber, VVV is wanted value
-    PO = CAT_buffer.toInt();                               // store string as int in PO to be displayed as power meter bar
+    Serial.print("RM5;");                                    // send CAT command to the radio, ask PO value
+    get_radio_response();                                    // call routine to read from radio
+    convert_CAT_buffer();                                    // CAT_buffer holds received string in format: RMNVVV000; N=meternumber, VVV is wanted value
+    PO = CAT_buffer.toInt();                                 // store string as int in PO to be displayed as power meter bar
 
     // read SWR meter
     Serial.print("RM6;");                                    // send CAT command to the radio, ask SWR value
@@ -111,19 +106,19 @@ void cat()
     CAT_buffer.remove(0, 2);                                          // remove characters PC
     if (CAT_buffer.startsWith("0")) {                                 // remove leading zero if present
         CAT_buffer.remove(0, 1);
-        if (CAT_buffer.startsWith("0")) {                               // remove leading zero if present
+        if (CAT_buffer.startsWith("0")) {                             // remove leading zero if present
             CAT_buffer.remove(0, 1);
         }
     }
     pwrsetting = CAT_buffer;                                          // present setting to pwrsetting
-    if (prevpwrsetting != pwrsetting)                               // if setting has changed since last read
+    if (prevpwrsetting != pwrsetting)                                 // if setting has changed since last read
     {
         // pwrsetting = 55; //debug
         tft.setTextColor(YELLOW);
         tft.fillRect((X + 218), 82, (20), 10, BLACK);  // clear previous display
         tft.setCursor((X + 222), 82);
         tft.setTextSize(1);
-        tft.println(pwrsetting);                                         // display power setting, it has changed
+        tft.println(pwrsetting);                                      // display power setting, it has changed
     }
     prevpwrsetting = pwrsetting;                                      // present setting now becomes previous setting
     tft.setTextSize(1);

@@ -23,17 +23,26 @@ void screen1text() {
     // check status & texting display
 
 }
-//SHOW SERIAL STATUS ON DISPLAY
-void show_status() {                            // this routine shows a red or green connection statusled on the display
+//SHOW CAT en TX STATUS ON DISPLAY
+void show_status() {                 // this routine shows a red or green connection statusled on the display
 
 
 
-    //tft.drawCircle(5, 11, 6, BLACK);         // outline of circle is black
+
     if (constatus == false) {
-        tft.fillCircle(5, 9, 3, RED);         // red led if status is false (75 + X, 85, 4, RED);
+        tft.fillCircle(5, 9, 3, TFT_RED);     // Red no CAT connection
     }
     else {
-        tft.fillCircle(5, 9, 3, GREEN);       // green led if status is true
+        tft.fillCircle(5, 9, 3, TFT_GREEN);   // Green CAT ok
+    }
+
+    if (in_tx == false) {        
+        tft.fillCircle(200, 85, 6, TFT_BLACK);      // TX circle background
+        digitalWrite(RELAY_PIN, HIGH);              // Set GPIO27 (Pin 2 on connector CN1) LOW !!! <<< inverted logic HIGH = OFF  LOW = ON >>>         
+    }
+    else {
+        tft.fillCircle(200, 85, 6, TFT_RED);        // TX circle on the display
+        digitalWrite(RELAY_PIN, LOW);               // Set GPIO27 (Pin 2 on connector CN1) HIGH !!!
     }
 }
 
@@ -53,7 +62,8 @@ void draw_radio_screen() {
     prevpwrsetting = "005";
     pVDD = 0;
     prevfreqA = "000030000";
-}
+    }
+
 // Drawing the meters on display
 
 
@@ -132,6 +142,12 @@ void draw_M_S1_meter()
 }
 void draw_PO_meter() {
 
+    tft.drawRoundRect(0, 23, 319, 196, 7, TFT_RED);  // Omkadering meters
+    tft.fillRoundRect(311, 19, 8, 10, 1, TFT_BLACK);
+    tft.drawFastVLine(318, 18, 10, TFT_RED);
+    tft.drawRoundRect(90, 1, 229, 23, 2, TFT_RED);
+    tft.drawFastHLine(91, 23, 227, TFT_BLACK);
+    
     //Draw PO meter, the PO meter can be substituted by the S meter
 
     tft.fillRect((X - 44), (Y + 173), (X + 244), 21, BLACK); // background of meter to black

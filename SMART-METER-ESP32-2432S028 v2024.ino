@@ -45,6 +45,7 @@
 #include "colourcode.h"
 #include "touch.h"
 #include "variables.h"
+#define RELAY_PIN  27 // Gebruik IO27 (Pin2 op connector CN1) voor het aansturen van een RELAY tijdens TX !!
 
 WebServer server(80); // Creëer een WebServer object op poort 80
 WebSocketsServer webSocket = WebSocketsServer(81); // WebSocket server op poort 81

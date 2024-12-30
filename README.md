@@ -2,7 +2,7 @@ Name:		SMART_METER_ESP32_2432S028_v2024.ino
 
 Created:	2024 and also under construction
 
-Author:	ON4JES / ON7LSP / ON3VNA
+Author:	ON4JES / ON7LSP / 
 
 
  This is a sketch for 7 bargraph meters on a 240 x 320, 2.8 TFT display (touch is not used) with ILI9341 for the Yaesu FT-991a (and FT-991).

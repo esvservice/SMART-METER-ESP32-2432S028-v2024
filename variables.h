@@ -6,6 +6,7 @@
 #define RED_LED_PIN 4
 #define GREEN_LED_PIN 16
 #define BLUE_LED_PIN 17
+#define RELAY_PIN  27 // Gebruik IO27 (Pin2 op connector CN1) voor het aansturen van een RELAY tijdens TX !!
 
 #define SER_BUF_SIZE 256
 
